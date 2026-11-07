@@ -1,0 +1,37 @@
+# Reference sandbox only. NOT four-bank acceptance or a production deployment.
+services:
+  node:
+    image: exchange-node:0.1.0
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      EXCHANGE_MODE: demo
+      EXCHANGE_DATABASE_URL: postgresql+psycopg://exchange:${EXCHANGE_DB_PASSWORD:?Set EXCHANGE_DB_PASSWORD locally}@postgres/exchange
+    volumes: ["node-data:/data"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    networks: [bank-internal]
+    read_only: true
+    tmpfs: ["/tmp"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+  postgres:
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_USER: exchange
+      POSTGRES_DB: exchange
+      POSTGRES_PASSWORD: ${EXCHANGE_DB_PASSWORD:?Set EXCHANGE_DB_PASSWORD locally}
+    volumes: ["pg-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exchange -d exchange"]
+      interval: 3s
+      retries: 20
+    networks: [bank-internal]
+volumes:
+  node-data:
+  pg-data:
+networks:
+  bank-internal:
+    internal: true

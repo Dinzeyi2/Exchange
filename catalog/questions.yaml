@@ -1,0 +1,12 @@
+version: 1
+questions:
+  lender_holds_at_least: {answerer: agent, allowed: [seller, buyer], params: [lender, facility_id, amount]}
+  my_register_position_matches: {answerer: agent, allowed: [seller, buyer], params: [facility_id, claimed_position]}
+  assignment_eligible: {answerer: agent, allowed: [seller, buyer], params: [assignee, facility_id, amount]}
+  consent_requirements: {answerer: agent, allowed: [seller, buyer], params: [facility_id, assignee_relationship]}
+  lender_kyc_cleared: {answerer: agent, allowed: [seller, buyer], params: [lender]}
+  my_ssi_matches: {answerer: agent, allowed: [seller, buyer], params: [trade_id, fingerprint]}
+  consent_status: {answerer: agent, allowed: [seller, buyer], params: [trade_id]}
+  funds_available: {answerer: buyer, allowed: [seller], params: [purchase_price]}
+  relationship_to_borrower: {answerer: buyer, allowed: [seller, agent], params: [facility_id]}
+  position_free_to_sell: {answerer: seller, allowed: [], params: [facility_id, amount]}

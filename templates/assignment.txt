@@ -1,0 +1,12 @@
+REFERENCE TEMPLATE — NOT AN OPERATIVE LEGAL DOCUMENT
+
+ASSIGNMENT AND ASSUMPTION
+Trade: {{ trade_id }}
+Facility: {{ facility_id }}
+Assignor: {{ seller }}
+Assignee: {{ buyer }}
+Principal (USD cents): {{ amount }}
+Price (%): {{ price }}
+Effective date: {{ settlement_date }}
+
+Bank counsel must provide and approve the operative agreement template.
