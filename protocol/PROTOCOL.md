@@ -1,27 +1,38 @@
-# Reference transport v1
+# Exchange signed protocol v1
 
-The dedicated peer listener serves only `POST /v1/envelope` and `GET /v1/health`.
-TLS is restricted to 1.3 and requires a client certificate. The trust store contains
-only explicitly configured peer certificates, then the DER SHA-256 fingerprint is
-compared with the envelope sender's pin. Local REST routes are never mounted there.
+`POST /v1/envelope` on the institution peer port is the only action endpoint.
+`GET /v1/health` requires a pinned peer certificate and returns no trade data.
+TLS is restricted to 1.3; exact certificate fingerprints bind TLS identity to `from`.
+Ed25519 signs RFC 8785 canonical JSON of every envelope field except `sig`.
+Timestamps must be within 120 seconds; nonces are retained at least ten minutes.
 
-Ed25519 signatures cover RFC 8785 canonical JSON, excluding `sig`. A persistent
-10-minute nonce cache rejects replay; timestamps must be within 120 seconds.
-The client checks the response signature, recipient, version, timestamp, trade,
-and request nonce. Every response body includes `request_nonce`; answers live in
-`body.answer`, protocol errors in `body.error`. This correlation wrapper is a
-reference-build extension to the spec. No response may be accepted on TLS trust alone.
+Signed replies include `body.request_nonce` and either `body.answer` or `body.error`.
+The client checks signature, sender, recipient, trade, version, timestamp and request
+nonce even for negative HTTP responses. Question answers have an independently
+verified signature and policy hash. This response-correlation wrapper is an explicit
+protocol extension preventing another valid answer from substituting for a reply.
 
-Only `ask` is dispatched on the network in this release. Other message types fail
-closed with `message_not_implemented`. Workflow actions run in the explicitly
-synthetic local sandbox; they must not be represented as bank-to-bank actions.
-Local REST is authenticated by demo bearer sessions, not peer certificates.
+`protocol/messages/` contains the generated closed action schemas. The role matrix
+in `node/runtime/messages.py` is normative: proposal seller→buyer/agent, affirmation
+buyer→seller/agent, KYC request agent→buyer and release buyer→agent, SSI lender→agent,
+consents agent↔borrower, documents agent↔seller/buyer, funding seller→buyer→agent,
+settlement seller→agent, receipts agent→seller/buyer/borrower and signed acknowledgments.
+Questions are fixed catalog operations; no free-form query endpoint exists.
 
-Unknown peers, certificate mismatch, replay, stale messages, bad signatures, catalog
-refusals and invalid bodies are rejected. Envelope rejects are audited by hash;
-verified inbound messages are recorded before dispatch. Responses are durably
-recorded before writing to the socket (an intent, not proof of delivery).
+Every business message includes `execution_id`. The receiver scopes its durable
+execution ledger by sender and execution ID and checks payload hash, message type
+and trade. Identical retries return the original result without applying effects;
+conflicting reuse is refused. `execution.status` is a signed, origin-scoped query
+for uncertain outcomes. A new transport nonce never creates a new business execution.
 
-Limits: 1 MiB messages, 16 KiB HTTP headers, 15-second read timeout, 600 verified
-messages per peer per minute. KYC network delivery is disabled, so the 25 MiB
-exception is not enabled. No raw KYC or SSI export routes exist in the local API.
+Peer bodies are limited to 1 MiB; approved KYC release packages to 25 MiB. The local
+signed initialization command may also carry a bank-owned package up to 25 MiB.
+HTTP headers are limited to 16 KiB; requests have a 15-second total read deadline;
+verified peer requests are limited to 600 per minute. Officer TLS certificates are
+not trusted on the peer listener, nor institution certificates on the officer port.
+
+Verified input is recorded before processing. Outbound send intents and signed
+responses are distinct audit events; intent is not proof of delivery. Sensitive
+envelopes are encrypted in the audit store. JWT-bearing local commands are recorded
+by hash with credentials redacted. No raw account or document is returned by a
+catalog question; only the defined boolean/status result and approved parameters.

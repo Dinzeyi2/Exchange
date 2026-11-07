@@ -1,0 +1,23 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "types": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Types",
+      "type": "array"
+    }
+  },
+  "required": [
+    "execution_id",
+    "types"
+  ],
+  "title": "RequestPackage",
+  "type": "object"
+}

@@ -1,0 +1,57 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    },
+    "facility_id": {
+      "title": "Facility Id",
+      "type": "string"
+    },
+    "amount": {
+      "exclusiveMinimum": 0,
+      "title": "Amount",
+      "type": "integer"
+    },
+    "seller": {
+      "title": "Seller",
+      "type": "string"
+    },
+    "buyer": {
+      "title": "Buyer",
+      "type": "string"
+    },
+    "effective_date": {
+      "title": "Effective Date",
+      "type": "string"
+    },
+    "document_hash": {
+      "title": "Document Hash",
+      "type": "string"
+    },
+    "register_total": {
+      "exclusiveMinimum": 0,
+      "title": "Register Total",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "execution_id",
+    "receipt_id",
+    "facility_id",
+    "amount",
+    "seller",
+    "buyer",
+    "effective_date",
+    "document_hash",
+    "register_total"
+  ],
+  "title": "Receipt",
+  "type": "object"
+}

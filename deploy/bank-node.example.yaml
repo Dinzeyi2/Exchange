@@ -1,0 +1,102 @@
+# Bank production configuration template. Replace all placeholders; never store PINs, DB passwords or data keys here.
+node_id: seller-bank
+legal_name: REPLACE_WITH_BANK_LEGAL_NAME
+lei: REPLACE_WITH_VALID_LEI
+role: seller
+mode: production
+database_url_env: EXCHANGE_DATABASE_URL
+certificate: /config/private/node.crt
+tls_key: /config/private/node-tls.key
+signing_backend: pkcs11
+signing_key: unused-in-pkcs11-mode
+public_signing_key: REPLACE_WITH_BASE64_ED25519_PUBLIC_KEY
+public_agreement_key: REPLACE_WITH_BASE64_X25519_PUBLIC_KEY
+agreement_key: /config/private/agreement.pem
+hsm_module: /opt/bank/pkcs11.so
+hsm_token: REPLACE_WITH_TOKEN_LABEL
+hsm_key_label: REPLACE_WITH_NODE_KEY_LABEL
+hsm_pin_env: EXCHANGE_HSM_PIN
+field_key_env: EXCHANGE_FIELD_KEY
+peer_host: 0.0.0.0
+peer_port: 8443
+officer_host: 127.0.0.1
+officer_port: 9443
+api_host: 127.0.0.1
+api_port: 8080
+catalog_file: /config/catalog.yaml
+document_template: /config/assignment.txt
+payment_inbox: /bank-hub/inbox
+payment_outbox: /bank-hub/outbox
+pacs_xsd: /config/schemas/pacs.008.001.08.xsd
+camt_xsd: /config/schemas/camt.054.001.08.xsd
+required_kyc_documents:
+- identity
+- tax
+officers:
+- officer_id: seller-trader
+  name: REPLACE_WITH_NAMED_OFFICER
+  roles:
+  - trader
+  signing_key: REPLACE_WITH_BASE64_OFFICER_ED25519_KEY
+  certificate_sha256: REPLACE_WITH_64_HEX_DER_CERT_PIN
+  certificate_path: /config/officers/seller-trader.crt
+- officer_id: seller-signatory
+  name: REPLACE_WITH_NAMED_SIGNATORY
+  roles:
+  - signatory
+  signing_key: REPLACE_WITH_SIGNATORY_PUBLIC_KEY
+  certificate_sha256: REPLACE_WITH_SIGNATORY_CERT_PIN
+  certificate_path: /config/officers/seller-signatory.crt
+- officer_id: seller-administrator
+  name: REPLACE_WITH_NAMED_ADMINISTRATOR
+  roles:
+  - administrator
+  signing_key: REPLACE_WITH_ADMINISTRATOR_PUBLIC_KEY
+  certificate_sha256: REPLACE_WITH_ADMINISTRATOR_CERT_PIN
+  certificate_path: /config/officers/seller-administrator.crt
+officer_hsm_labels:
+  seller-trader: REPLACE_WITH_OFFICER_HSM_KEY_LABEL
+  seller-signatory: REPLACE_WITH_SIGNATORY_HSM_KEY_LABEL
+  seller-administrator: REPLACE_WITH_ADMINISTRATOR_HSM_KEY_LABEL
+oidc:
+  issuer: https://REPLACE_BANK_IDP/issuer
+  audience: exchange-seller-api
+  jwks_file: /config/bank-jwks.json
+  subjects:
+    REPLACE_EMPLOYEE_SUBJECT: seller-trader
+  authorization_endpoint: https://REPLACE_BANK_IDP/authorize
+  token_endpoint: https://REPLACE_BANK_IDP/token
+  client_id: exchange-seller-ui
+  redirect_uri: https://REPLACE_INTERNAL_NODE_UI/
+peers:
+- node_id: buyer-bank
+  legal_name: REPLACE_WITH_BUYER_LEGAL_NAME
+  lei: REPLACE_WITH_BUYER_LEI
+  role: buyer
+  signing_key: REPLACE_WITH_BUYER_ED25519_KEY
+  agreement_key: REPLACE_WITH_BUYER_X25519_KEY
+  certificate_sha256: REPLACE_WITH_BUYER_CERT_PIN
+  certificate_path: /config/peers/buyer.crt
+  endpoint: https://REPLACE_BUYER_NODE:8443
+- node_id: agent-bank
+  legal_name: REPLACE_WITH_AGENT_LEGAL_NAME
+  lei: REPLACE_WITH_AGENT_LEI
+  role: agent
+  signing_key: REPLACE_WITH_AGENT_ED25519_KEY
+  agreement_key: REPLACE_WITH_AGENT_X25519_KEY
+  certificate_sha256: REPLACE_WITH_AGENT_CERT_PIN
+  certificate_path: /config/peers/agent.crt
+  endpoint: https://REPLACE_AGENT_NODE:8443
+- node_id: borrower-node
+  legal_name: REPLACE_WITH_BORROWER_LEGAL_NAME
+  lei: REPLACE_WITH_BORROWER_LEI
+  role: borrower
+  signing_key: REPLACE_WITH_BORROWER_ED25519_KEY
+  agreement_key: REPLACE_WITH_BORROWER_X25519_KEY
+  certificate_sha256: REPLACE_WITH_BORROWER_CERT_PIN
+  certificate_path: /config/peers/borrower.crt
+  endpoint: https://REPLACE_BORROWER_NODE:8443
+peer_officers:
+  buyer-bank: {}
+  agent-bank: {}
+  borrower-node: {}

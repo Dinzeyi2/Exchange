@@ -1,37 +1,194 @@
-# Reference sandbox only. NOT four-bank acceptance or a production deployment.
-services:
-  node:
-    image: exchange-node:0.1.0
-    build:
-      context: ..
-      dockerfile: deploy/Dockerfile
-    ports: ["127.0.0.1:8000:8000"]
-    environment:
-      EXCHANGE_MODE: demo
-      EXCHANGE_DATABASE_URL: postgresql+psycopg://exchange:${EXCHANGE_DB_PASSWORD:?Set EXCHANGE_DB_PASSWORD locally}@postgres/exchange
-    volumes: ["node-data:/data"]
-    depends_on:
-      postgres: {condition: service_healthy}
-    networks: [bank-internal]
-    read_only: true
-    tmpfs: ["/tmp"]
-    cap_drop: [ALL]
-    security_opt: ["no-new-privileges:true"]
-  postgres:
-    image: postgres:16-bookworm
-    environment:
-      POSTGRES_USER: exchange
-      POSTGRES_DB: exchange
-      POSTGRES_PASSWORD: ${EXCHANGE_DB_PASSWORD:?Set EXCHANGE_DB_PASSWORD locally}
-    volumes: ["pg-data:/var/lib/postgresql/data"]
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U exchange -d exchange"]
-      interval: 3s
-      retries: 20
-    networks: [bank-internal]
-volumes:
-  node-data:
-  pg-data:
+# Four institution deployment template. Supply approved per-bank configuration and secrets.
+# Acceptance fixture provisioning lives in certify/containers.py, not in the node runtime.
 networks:
-  bank-internal:
+  agent-bank:
     internal: true
+  borrower-bank:
+    internal: true
+  buyer-bank:
+    internal: true
+  peer-fabric: {}
+  seller-bank:
+    internal: true
+services:
+  agent:
+    cap_drop:
+    - ALL
+    command: []
+    depends_on:
+      agent-db:
+        condition: service_healthy
+    entrypoint:
+    - exchange
+    - serve
+    - --config
+    - /config/node.yaml
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/agent/runtime.env
+    image: exchange-node:0.2.0
+    networks:
+    - peer-fabric
+    - agent-bank
+    ports:
+    - 127.0.0.1:18082:8080
+    read_only: true
+    security_opt:
+    - no-new-privileges:true
+    tmpfs:
+    - /tmp
+    volumes:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/agent:/config:ro
+    - agent-data:/data
+  agent-db:
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/agent/database.env
+    healthcheck:
+      interval: 3s
+      retries: 30
+      test:
+      - CMD-SHELL
+      - pg_isready -U exchange -d exchange
+      timeout: 3s
+    image: postgres:16-bookworm
+    networks:
+    - agent-bank
+    volumes:
+    - agent-postgres:/var/lib/postgresql/data
+  borrower:
+    cap_drop:
+    - ALL
+    command: []
+    depends_on:
+      borrower-db:
+        condition: service_healthy
+    entrypoint:
+    - exchange
+    - serve
+    - --config
+    - /config/node.yaml
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/borrower/runtime.env
+    image: exchange-node:0.2.0
+    networks:
+    - peer-fabric
+    - borrower-bank
+    ports:
+    - 127.0.0.1:18083:8080
+    read_only: true
+    security_opt:
+    - no-new-privileges:true
+    tmpfs:
+    - /tmp
+    volumes:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/borrower:/config:ro
+    - borrower-data:/data
+  borrower-db:
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/borrower/database.env
+    healthcheck:
+      interval: 3s
+      retries: 30
+      test:
+      - CMD-SHELL
+      - pg_isready -U exchange -d exchange
+      timeout: 3s
+    image: postgres:16-bookworm
+    networks:
+    - borrower-bank
+    volumes:
+    - borrower-postgres:/var/lib/postgresql/data
+  buyer:
+    cap_drop:
+    - ALL
+    command: []
+    depends_on:
+      buyer-db:
+        condition: service_healthy
+    entrypoint:
+    - exchange
+    - serve
+    - --config
+    - /config/node.yaml
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/buyer/runtime.env
+    image: exchange-node:0.2.0
+    networks:
+    - peer-fabric
+    - buyer-bank
+    ports:
+    - 127.0.0.1:18081:8080
+    read_only: true
+    security_opt:
+    - no-new-privileges:true
+    tmpfs:
+    - /tmp
+    volumes:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/buyer:/config:ro
+    - buyer-data:/data
+  buyer-db:
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/buyer/database.env
+    healthcheck:
+      interval: 3s
+      retries: 30
+      test:
+      - CMD-SHELL
+      - pg_isready -U exchange -d exchange
+      timeout: 3s
+    image: postgres:16-bookworm
+    networks:
+    - buyer-bank
+    volumes:
+    - buyer-postgres:/var/lib/postgresql/data
+  seller:
+    cap_drop:
+    - ALL
+    command: []
+    depends_on:
+      seller-db:
+        condition: service_healthy
+    entrypoint:
+    - exchange
+    - serve
+    - --config
+    - /config/node.yaml
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/seller/runtime.env
+    image: exchange-node:0.2.0
+    networks:
+    - peer-fabric
+    - seller-bank
+    ports:
+    - 127.0.0.1:18080:8080
+    read_only: true
+    security_opt:
+    - no-new-privileges:true
+    tmpfs:
+    - /tmp
+    volumes:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/seller:/config:ro
+    - seller-data:/data
+  seller-db:
+    env_file:
+    - ${EXCHANGE_CONFIG_ROOT:?Set bank configuration root}/seller/database.env
+    healthcheck:
+      interval: 3s
+      retries: 30
+      test:
+      - CMD-SHELL
+      - pg_isready -U exchange -d exchange
+      timeout: 3s
+    image: postgres:16-bookworm
+    networks:
+    - seller-bank
+    volumes:
+    - seller-postgres:/var/lib/postgresql/data
+volumes:
+  agent-data: {}
+  agent-postgres: {}
+  borrower-data: {}
+  borrower-postgres: {}
+  buyer-data: {}
+  buyer-postgres: {}
+  seller-data: {}
+  seller-postgres: {}

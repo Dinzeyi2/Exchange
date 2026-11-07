@@ -1,3 +1,4 @@
+import hashlib
 import os
 from decimal import Decimal
 from pathlib import Path
@@ -8,8 +9,16 @@ PACS = "urn:iso:std:iso:20022:tech:xsd:pacs.008.001.08"
 CAMT = "urn:iso:std:iso:20022:tech:xsd:camt.054.001.08"
 
 
-def pacs008(execution_id, amount, debtor, creditor, ssi, ts):
-    """Reference message. Production requires bank-supplied scheme/XSD validation."""
+def execution_ref(kind, trade_id):
+    return ("F" if kind == "funding" else "D") + hashlib.sha256(
+        trade_id.encode()
+    ).hexdigest()[:32]
+
+
+def pacs008(execution_id, amount, debtor, creditor, ssi, ts, debtor_ssi=None):
+    """ISO 20022 pacs.008.001.08, validated against the bank's pinned scheme XSD before export."""
+    if not execution_id or len(execution_id) > 35:
+        raise ValueError("payment execution reference must fit Max35Text")
     if type(amount) is not int or amount <= 0:
         raise ValueError("invalid amount")
     root = E.Element("{" + PACS + "}Document", nsmap={None: PACS})
@@ -33,13 +42,23 @@ def pacs008(execution_id, amount, debtor, creditor, ssi, ts):
     child(tx, "IntrBkSttlmAmt", format(Decimal(amount) / 100, ".2f"), Ccy="USD")
     child(tx, "ChrgBr", "SHAR")
     child(child(tx, "Dbtr"), "Nm", debtor)
-    child(child(tx, "Cdtr"), "Nm", creditor)
-    child(child(child(tx, "CdtrAcct"), "Id"), "Othr")
-    other = tx.find(".//{" + PACS + "}Othr")
-    child(other, "Id", ssi.account)
+    if debtor_ssi:
+        child(
+            child(child(child(tx, "DbtrAcct"), "Id"), "Othr"), "Id", debtor_ssi.account
+        )
+    dbtr_agent = child(child(tx, "DbtrAgt"), "FinInstnId")
+    if debtor_ssi:
+        member = child(dbtr_agent, "ClrSysMmbId")
+        child(child(member, "ClrSysId"), "Cd", "USABA")
+        child(member, "MmbId", debtor_ssi.aba)
+    else:
+        child(dbtr_agent, "Nm", debtor)
     agent = child(child(tx, "CdtrAgt"), "FinInstnId")
     member = child(agent, "ClrSysMmbId")
+    child(child(member, "ClrSysId"), "Cd", "USABA")
     child(member, "MmbId", ssi.aba)
+    child(child(tx, "Cdtr"), "Nm", creditor)
+    child(child(child(child(tx, "CdtrAcct"), "Id"), "Othr"), "Id", ssi.account)
     return E.tostring(root, xml_declaration=True, encoding="UTF-8")
 
 
@@ -74,7 +93,10 @@ def read_camt054(payload):
         cents = Decimal(amount.text) * 100
         if not cents.is_finite() or cents != cents.to_integral_value() or cents <= 0:
             raise ValueError("invalid credit amount")
-        account = root.findtext(".//c:Ntfctn/c:Acct/c:Id/c:Othr/c:Id", namespaces=ns)
+        notification = entry.getparent()
+        if notification.tag != "{" + CAMT + "}Ntfctn":
+            raise ValueError("credit entry outside notification")
+        account = notification.findtext("c:Acct/c:Id/c:Othr/c:Id", namespaces=ns)
         if not account:
             raise ValueError("missing settlement account")
         entries.append(

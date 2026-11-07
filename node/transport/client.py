@@ -37,7 +37,7 @@ def send(peer, message, context):
         )
         response = connection.getresponse()
         payload = response.read(1024 * 1024 + 1)
-        if len(payload) > 1024 * 1024 or response.status != 200:
+        if len(payload) > 1024 * 1024:
             raise ProtocolError("peer_response_invalid")
         result = json.loads(payload)
         try:
@@ -58,6 +58,12 @@ def send(peer, message, context):
                 raise ValueError("response binding mismatch")
         except Exception:
             raise ProtocolError("invalid_signed_response")
+        if (
+            result.get("type") not in ["answer", "error"]
+            or response.status != 200
+            and result.get("type") != "error"
+        ):
+            raise ProtocolError("peer_response_invalid")
         return result
     finally:
         connection.close()

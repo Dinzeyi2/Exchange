@@ -36,17 +36,26 @@ class AuditEntry(Base):
 
 
 class Store:
-    def __init__(self, url):
+    def __init__(self, url, initialize=True):
         self.engine = create_engine(
             url,
             connect_args={"check_same_thread": False}
             if url.startswith("sqlite")
             else {},
         )
-        Base.metadata.create_all(self.engine)
+        if initialize:
+            Base.metadata.create_all(self.engine)
         self.sessions = sessionmaker(self.engine, expire_on_commit=False)
         self.lock = threading.RLock()
-        if self.engine.dialect.name == "sqlite":
+        if initialize and self.engine.dialect.name == "postgresql":
+            with self.engine.begin() as c:
+                c.exec_driver_sql(
+                    "CREATE OR REPLACE FUNCTION exchange_audit_append_only() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'audit entries are append only'; END $$"
+                )
+                c.exec_driver_sql(
+                    "DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname='exchange_audit_no_mutation') THEN CREATE TRIGGER exchange_audit_no_mutation BEFORE UPDATE OR DELETE OR TRUNCATE ON audit_entries FOR EACH STATEMENT EXECUTE FUNCTION exchange_audit_append_only(); END IF; END $$"
+                )
+        if initialize and self.engine.dialect.name == "sqlite":
             with self.engine.begin() as c:
                 c.exec_driver_sql(
                     "CREATE TRIGGER IF NOT EXISTS audit_no_update BEFORE UPDATE ON audit_entries BEGIN SELECT RAISE(ABORT, 'append only'); END"
@@ -120,6 +129,19 @@ class Store:
             }
             for r in s.scalars(select(AuditEntry).order_by(AuditEntry.seq))
         ]
+
+    def verify_audit_chain_readonly(self, s):
+        previous = "0" * 64
+        for i, row in enumerate(self.audit_rows(s), 1):
+            claimed = row.pop("hash")
+            if (
+                row["seq"] != i
+                or row["prev_hash"] != previous
+                or digest(row) != claimed
+            ):
+                return False
+            previous = claimed
+        return True
 
     def verify_audit_chain(self):
         with self.transaction() as s:

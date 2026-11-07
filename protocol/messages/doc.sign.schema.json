@@ -1,0 +1,26 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "document_hash": {
+      "title": "Document Hash",
+      "type": "string"
+    },
+    "approval": {
+      "additionalProperties": true,
+      "title": "Approval",
+      "type": "object"
+    }
+  },
+  "required": [
+    "execution_id",
+    "document_hash",
+    "approval"
+  ],
+  "title": "DocumentSignature",
+  "type": "object"
+}

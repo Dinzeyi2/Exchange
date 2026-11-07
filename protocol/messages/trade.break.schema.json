@@ -1,0 +1,21 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "reason": {
+      "const": "booked_trade_mismatch",
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "execution_id",
+    "reason"
+  ],
+  "title": "TradeBreak",
+  "type": "object"
+}

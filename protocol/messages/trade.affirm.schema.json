@@ -1,0 +1,20 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "terms_hash": {
+      "title": "Terms Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "execution_id",
+    "terms_hash"
+  ],
+  "title": "Affirm",
+  "type": "object"
+}

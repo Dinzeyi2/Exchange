@@ -1,4 +1,4 @@
-name: Reference checks
+name: Distributed node checks
 on: [push, pull_request]
 permissions:
   contents: read
@@ -17,8 +17,15 @@ jobs:
           cache-dependency-path: ui/package-lock.json
       - run: uv sync --frozen --extra test
       - run: uv run --frozen pytest -q
-      - run: uv run --frozen exchange demo
-      - run: uv run --frozen python -m sim.network
       - run: npm --prefix ui ci --no-audit --no-fund
       - run: npm --prefix ui run build
-      - run: uv run --frozen exchange certify --reference
+      - run: docker build -f deploy/four-node/Dockerfile -t exchange-node:distributed .
+      - run: uv run --frozen exchange certify --deployment containers --acceptance --output .local/certification
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: distributed-acceptance-evidence
+          path: |
+            .local/certification/report.json
+            .local/certification/report.pdf
+            .local/certification/report.pdf.sig.json

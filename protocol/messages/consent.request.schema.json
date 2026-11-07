@@ -1,0 +1,26 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "terms": {
+      "additionalProperties": true,
+      "title": "Terms",
+      "type": "object"
+    },
+    "due_at": {
+      "title": "Due At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "execution_id",
+    "terms",
+    "due_at"
+  ],
+  "title": "ConsentRequest",
+  "type": "object"
+}

@@ -2,8 +2,8 @@ import pytest
 
 from node.audit.store import Store
 from node.signer.backends import SoftwareSigner
-from node.workflow.engine import OFFICERS, Workflow
-from sim.seed import sample_terms, seed
+from prototype.legacy.seed import sample_terms, seed
+from prototype.legacy.workflow import OFFICERS, Workflow
 
 
 @pytest.fixture

@@ -1,0 +1,20 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "receipt_id": {
+      "title": "Receipt Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "execution_id",
+    "receipt_id"
+  ],
+  "title": "Ack",
+  "type": "object"
+}

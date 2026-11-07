@@ -6,39 +6,33 @@ app = typer.Typer(no_args_is_help=True)
 
 
 @app.command()
-def serve(host: str = "127.0.0.1", port: int = 8000):
-    """Run the local synthetic sandbox (not a production bank node)."""
-    import uvicorn
+def serve(config: Path = typer.Option(..., exists=True, readable=True)):
+    """Start one institution's peer and officer listeners from explicit configuration."""
+    import asyncio
 
-    from node.api.app import create_app
+    from node.runtime.runner import run
 
-    uvicorn.run(create_app(), host=host, port=port)
-
-
-@app.command()
-def demo():
-    """Run the deterministic synthetic assignment and print measured timings."""
-    import json
-
-    from sim.scenario import run
-
-    typer.echo(json.dumps(run(), indent=2))
+    asyncio.run(run(config))
 
 
 @app.command()
-def certify(output: Path = Path(".local/certification"), reference: bool = False):
-    """Run reference checks; report is explicitly NOT a go-live certificate."""
+def certify(
+    output: Path = Path(".local/certification"),
+    deployment: str = "processes",
+    acceptance: bool = False,
+):
+    """Run the real distributed node runtime against controlled acceptance fixtures."""
     from certify.runner import run
 
-    report = run(output)
+    report = run(output, deployment=deployment)
     typer.echo(str(output / "report.json"))
-    if not reference and not report["go_live_eligible"]:
+    if not acceptance and not report["go_live_eligible"]:
         typer.echo(
-            "Go-live certification unavailable; see the report for incomplete requirements. Use --reference only for sandbox checks.",
+            "Go-live certification unavailable; see the report for incomplete requirements. Use --acceptance for fixture-based distributed checks.",
             err=True,
         )
         raise typer.Exit(2)
-    if report["status"] != "reference_checks_passed":
+    if report["status"] != "distributed_acceptance_passed":
         raise typer.Exit(1)
 
 
@@ -50,3 +44,21 @@ def verify_audit(database: str = "sqlite:///.local/exchange.db"):
     typer.echo("valid" if valid else "INVALID")
     if not valid:
         raise typer.Exit(1)
+
+
+@app.command("migrate")
+def migrate():
+    """Provision this node schema using the separately authorized migration DB role."""
+    import os
+
+    from node.audit.store import Store
+
+    store = Store(os.environ["EXCHANGE_DATABASE_URL"], initialize=True)
+    store.engine.dispose()
+    typer.echo(
+        "Node schema initialized; configure a least-privilege runtime role before serving."
+    )
+
+
+if __name__ == "__main__":
+    app()

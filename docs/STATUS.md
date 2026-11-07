@@ -1,29 +1,59 @@
-# Implementation status — 0.1.0
+# Implementation status — 0.2.0
 
-**This is a reference build, not completed v1 and not ready for bank data or go-live.**
-The distinction applies equally to local execution, Docker, Helm and the `certify` command.
+## Implemented institution architecture
 
-| Spec milestone | Delivered | Still required |
-|---|---|---|
-| 1. Transport, identity, audit | Real pinned mutual TLS 1.3 listeners/client, canonical Ed25519 signing, timestamp/replay/sender binding checks, bounded requests, persistent hash chain, on-demand verification | Bank identity enrollment/rollover, dual admin bundle approval, scheduled verification/WORM anchoring, PostgreSQL append-only privileges/migrations, delivery accounting |
-| 2. Catalog and adapters | Fixed question allowlist, per-role authorization, self-position and self-SSI restrictions, signed answers, policy hash, CSV/configured SQL-view readers, integer valuation/ABA/LEI/calendar helpers | Full canonical normalized schema/migrations, live role-specific adapters, bank view conformance and idempotent external register writer, stricter per-question enums/limits, canonical int64 wire strings |
-| 3. Workflow | Deterministic persisted local sandbox, ten checks, gap tasks, exact buyer-booked fixture affirmation, terminal hard stops/trade breaks, transactional rechecks | Distributed workflow dispatcher/recovery, nine remote checks integrated into workflow, consent timers/deemed-consent agreements, explicit full transition table/reconciliation states |
-| 4. Actions and approvals | Signed local named approvals, officer role rules, distinct SSI dual control, rejection reasons, hash-bound KYC/SSI tasks, synthetic KYC/SSI/consent/doc actions | Actual explicit peer data release with destination restrictions, authenticated bank identities, KYC validation/attestation, signed consent and proposal delivery, per-node document verification |
-| 5. Payments and receipts | Exact-price synthetic credit reconciliation, atomic reference register transfer, trade/execution idempotency, signed receipt, durable payment intent, XML builder/parser and explicit XSD helper | Bank XSDs, transactional file/MQ exporter, receipt delivery/acknowledgments, agent-to-seller disbursement, seller camt match, own-book updates, CLOSED and uncertain-outcome reconciliation |
-| 6. UI | React/TS local workspace, approval inbox, trade dashboard/checklist/timeline, document preview, reference event durations, audit chain view, officer directory/integration status, search/filter, responsive layouts | Production officer SSO/MFA, internal notifications, editable dual-control peer/catalog/update admin, verified remote answer badges, consent countdown/T+ counters, legal bank templates |
-| 7. Simulation | Local synthetic $500M lifecycle; four separate mTLS listeners/keys/databases; nine parallel signed questions; timing reports | Four-container full distributed lifecycle with planted gaps and who-saw-what verification, 20 concurrent trades and throughput load |
-| 8. Production security | PKCS#11 signer interface/backend, strict default peer transport, disabled production startup | Tested HSM sessions/rotation, SSO+step-up, bank KMS encryption of sensitive fields, least-privilege DB deployment, signed update enforcement/dual approval, pen test |
-| 9. Certification | Signed JSON reference report, unit/security/integration tests | All §12 cases in distributed production context, adapter and all-message conformance, bank hardware metrics, JSON+PDF go-live certification |
-| 10. Pilot | Dockerfile, Compose sandbox, Helm sandbox, security/runbook/decisions/spec docs | Signed images, SBOM/reproducible release verification, isolated four-node acceptance, backup/restore and bank installation certification |
+- Four independent role-specific processes/containers; four private databases;
+  separate node/officer/agreement/TLS identities and field-encryption keys.
+- Full distributed settlement path through typed, signed envelopes over pinned
+  mutual TLS 1.3. No shared node object, database or production fixture seeding.
+- Local officer roles and payload-bound signed approvals, two distinct agent SSI
+  officers, required second-officer callback reference, independent agreement
+  verification, and approval signature rechecking at settlement.
+- Per-node book updates from signed agent receipts; exact booked-credit matching
+  in the agent's own hub account; separate seller disbursement and reconciliation.
+- Durable encrypted outbox, atomic inbound execution ledger, restart recovery,
+  signed outcome queries, same-execution manual retry, duplicate/conflict refusal.
+- AES-GCM encryption of sensitive local records and envelope audit bodies;
+  append-only audit triggers, hash chains, startup/hourly/on-demand verification.
+- Bank OIDC pinned-JWKS verification, local employee mapping, fresh MFA checks,
+  PKCS#11 node/officer backends and local React/REST workspace. The production
+  configuration refuses software signing, missing bank controls or fixture templates.
+- Four-container/four-PostgreSQL acceptance harness, negative network security
+  tests, independently verified signatures/privacy report and signed JSON/PDF evidence.
 
-The local workflow never sends raw data to peers. No claim is made that this alone
-satisfies acceptance criterion 4: the complete four-node workflow has not been
-implemented, so its end-to-end who-saw-what report cannot yet be generated.
+Historical shared workflow code is retained only in `prototype/legacy/` for old
+tests and source history. It is not a production entry point or image component.
 
-## Next implementation sequence
+## Required before a bank uses real positions or payments
 
-1. Normalize persistence and apply PostgreSQL migrations/least-privilege roles.
-2. Implement each typed peer action with per-role storage and explicit release policy; bind approvals to the bank-authenticated officer and exact payload.
-3. Wire remote signed readiness results and the distributed state machine; add durable outbox, same-execution reconciliation and consent timing.
-4. Integrate bank HSM, SSO/MFA, KMS, legal templates and ISO scheme/XSDs.
-5. Run four-container acceptance, security/privacy inspection and measured load; generate go-live certification only after those checks pass.
+These are not claims satisfied by the fixture run:
+
+1. Provision and exercise the bank's actual HSM module/token/keys, pinned peer and
+   officer identities, and bank OIDC/MFA policy; validate certificate/JWKS/key
+   rotation, revocation and break-glass operation.
+2. Deliver the bank-managed data key securely and establish field-key rotation,
+   retention and recovery. Bank disk encryption, WORM anchoring and administrator
+   privilege separation remain deployment responsibilities.
+3. Integrate and reconcile the authoritative agency/loan/OMS/KYC/treasury systems.
+   The current signed import initializes the node's own ledger; it is not a
+   continuously synchronized vendor-specific bank adapter. Initial import is not
+   an unrestricted way to overwrite live positions.
+4. Supply and validate legal agreement text, consent rules/exemptions/response
+   windows, jurisdiction/holiday conventions, and approved catalog parameters.
+   Full deemed-consent scheduling and all facility-specific exceptions are not
+   certified by the planted consent-required scenario.
+5. Supply the bank's official ISO scheme XSDs and real payment-hub file ownership,
+   acknowledgments and reconciliation contracts. Production XSD validation is
+   mandatory; acceptance fixtures do not substitute for scheme certification.
+   Ambiguous export recovery deliberately requires bank investigation and must
+   not be resolved by deleting an outbox row or generating a new payment ID.
+6. Validate the deployment's bank firewall/network policy, internal HTTPS ingress,
+   least-privilege DB roles, backup/restore, failure/partition recovery, sustained
+   load and bank WAN latency. The Helm template has not been run in a bank cluster.
+7. Complete independent security/vendor review and the remaining release controls:
+   signed images/SBOM/update verification and dual-admin configuration/update UI.
+
+`exchange certify --acceptance` means the distributed fixture suite passed.
+`go_live_eligible` is false until the above bank-specific evidence exists. This
+release must not be sold or operated as an already-certified production bank
+installation merely because the architecture and fixture acceptance pass.

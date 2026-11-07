@@ -134,7 +134,7 @@ class Transport:
                 rate = {"minute": minute, "count": 0}
             rate["count"] += 1
             self.store.put(s, ratekey, "rate", rate)
-            self.store.audit(s, msg.type, raw, "in", msg.sender)
+            self.store.audit(s, msg.type, self.audit_encoder(raw) if hasattr(self,"audit_encoder") else raw, "in", msg.sender)
         try:
             if rate["count"] > 600:
                 raise ProtocolError("rate_limit", 429)
@@ -166,7 +166,7 @@ class Transport:
                 {"request_nonce": msg.nonce, "error": "internal_processing_error"},
             )
         with self.store.transaction() as s:
-            self.store.audit(s, response["type"], response, "out", msg.sender)
+            self.store.audit(s, response["type"], self.audit_encoder(response) if hasattr(self,"audit_encoder") else response, "out", msg.sender)
         return response
 
 

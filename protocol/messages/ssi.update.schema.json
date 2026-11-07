@@ -1,0 +1,68 @@
+{
+  "$defs": {
+    "Ssi": {
+      "additionalProperties": false,
+      "properties": {
+        "owner_legal_name": {
+          "title": "Owner Legal Name",
+          "type": "string"
+        },
+        "bank_name": {
+          "title": "Bank Name",
+          "type": "string"
+        },
+        "aba": {
+          "title": "Aba",
+          "type": "string"
+        },
+        "account": {
+          "maxLength": 34,
+          "minLength": 1,
+          "title": "Account",
+          "type": "string"
+        },
+        "currency": {
+          "default": "USD",
+          "title": "Currency",
+          "type": "string"
+        },
+        "effective_at": {
+          "title": "Effective At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "owner_legal_name",
+        "bank_name",
+        "aba",
+        "account",
+        "effective_at"
+      ],
+      "title": "Ssi",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "ssi": {
+      "$ref": "#/$defs/Ssi"
+    },
+    "approval": {
+      "additionalProperties": true,
+      "title": "Approval",
+      "type": "object"
+    }
+  },
+  "required": [
+    "execution_id",
+    "ssi",
+    "approval"
+  ],
+  "title": "SsiUpdate",
+  "type": "object"
+}

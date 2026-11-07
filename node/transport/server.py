@@ -16,9 +16,13 @@ async def serve(transport, context, host="0.0.0.0", port=8443):
         body = bytearray()
         request = None
         raw = {}
+        deadline = asyncio.get_running_loop().time() + 15
         try:
             while True:
-                data = await asyncio.wait_for(reader.read(65536), 15)
+                data = await asyncio.wait_for(
+                    reader.read(65536),
+                    max(0, deadline - asyncio.get_running_loop().time()),
+                )
                 if not data:
                     return
                 conn.receive_data(data)
@@ -30,8 +34,7 @@ async def serve(transport, context, host="0.0.0.0", port=8443):
                         request = ev
                     elif isinstance(ev, h11.Data):
                         body.extend(ev.data)
-                        # KYC delivery is not enabled on this reference listener.
-                        if len(body) > 1024 * 1024:
+                        if len(body) > 25 * 1024 * 1024:
                             raise ProtocolError("body_too_large", 413)
                     elif isinstance(ev, h11.EndOfMessage):
                         cert = writer.get_extra_info("ssl_object").getpeercert(
@@ -54,6 +57,12 @@ async def serve(transport, context, host="0.0.0.0", port=8443):
                                     ValueError("non-finite number")
                                 ),
                             )
+                            if len(body) > 1024 * 1024 and (
+                                not isinstance(raw, dict)
+                                or raw.get("type")
+                                not in ["kyc.release", "local.import"]
+                            ):
+                                raise ProtocolError("body_too_large", 413)
                             result = await asyncio.to_thread(
                                 transport.receive, raw, pin
                             )

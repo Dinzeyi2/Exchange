@@ -1,3 +1,9 @@
-image: exchange-node:0.1.0
+image: exchange-node:0.2.0
 storage: 5Gi
-# Namespace-local access only; no ingress, NodePort or load balancer.
+role: seller
+# One Helm release per institution/namespace. Never share config/secret/database objects.
+configSecret: exchange-bank-config
+runtimeSecret: exchange-bank-runtime
+# Pinned peer addresses and bank DB addresses must be supplied by the bank.
+peerCidrs: []
+databaseCidrs: []

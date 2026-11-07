@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "exchange-node"
-version = "0.1.0"
-description = "On-prem syndicated loan settlement reference node"
+version = "0.2.0"
+description = "Institution-isolated syndicated loan settlement node"
 requires-python = ">=3.12"
-dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.34,<1", "sqlalchemy>=2.0,<3", "psycopg[binary]>=3.2,<4", "alembic>=1.14,<2", "cryptography>=44", "pydantic>=2.10,<3", "PyYAML>=6,<7", "rfc8785>=0.1.4,<1", "httpx>=0.28,<1", "lxml>=5.3,<7", "typer>=0.15,<1"]
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.34,<1", "sqlalchemy>=2.0,<3", "psycopg[binary]>=3.2,<4", "alembic>=1.14,<2", "cryptography>=44", "pydantic>=2.10,<3", "PyYAML>=6,<7", "rfc8785>=0.1.4,<1", "httpx>=0.28,<1", "lxml>=5.3,<7", "typer>=0.15,<1", "python-pkcs11>=0.7,<1"]
 [project.optional-dependencies]
 test = ["pytest>=8,<10", "pytest-asyncio>=0.25,<2"]
 hsm = ["python-pkcs11>=0.7,<1"]
@@ -17,6 +17,7 @@ exchange = "node.ops.cli:app"
 include = ["node*", "certify*", "sim*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 asyncio_default_fixture_loop_scope = "function"
 
 [tool.ruff]

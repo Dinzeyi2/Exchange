@@ -1,0 +1,35 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "cleared",
+        "updated",
+        "CONSENTED",
+        "DECLINED"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "approvals": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Approvals",
+      "type": "array"
+    }
+  },
+  "required": [
+    "execution_id",
+    "status",
+    "approvals"
+  ],
+  "title": "Status",
+  "type": "object"
+}

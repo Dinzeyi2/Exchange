@@ -1,62 +1,96 @@
-# Reference operations runbook
+# Institution operations
 
-## Startup and health
+## Provision one node
 
-Follow README.md from the repository root. The local API binds to loopback by
-default; `--host 0.0.0.0` is reserved for a controlled container/internal network.
-The unauthenticated local `/api/health` returns no trade data. The peer-only
-`/v1/health` is a different TLS listener and requires a pinned client certificate.
-Live services do not survive a cloud snapshot; restart `exchange serve` after
-restoration. Use the existing isolated checkout, not a new worktree.
+Use the existing isolated checkout; do not create another worktree unless requested.
+Install with `uv sync --frozen --extra test` for development or build the pinned
+Dockerfile. A live node requires explicit `--config`; no shared application starts
+without it. Do not use generated certification identities for an actual bank.
 
-`.local/` contains the SQLite database, development private keys and sandbox
-password. Restrict the containing directory and never commit, attach or email it.
-Use `EXCHANGE_DATA_DIR` to relocate it and `EXCHANGE_DATABASE_URL` for pilot
-PostgreSQL. Changing the database does not migrate existing synthetic state.
-`EXCHANGE_MODE` accepts only `demo` in this release; production fails closed.
+Provision the institution's own PostgreSQL database, PKCS#11 module/token/keys,
+TLS identity, field-encryption data key, officer identities, pinned peer public
+bundles, approved catalog/template, pinned bank OIDC JWKS and hub/XSD configuration.
+The full Settings schema is `node/runtime/config.py`; the production example is
+`deploy/bank-node.example.yaml`. Secret values belong in bank secret delivery, not
+YAML, Git, chat, logs or image layers.
 
-## Reference checks
+1. Run `EXCHANGE_DATABASE_URL` under the authorized migration DB account and
+   `exchange migrate`. This creates the schema and append-only audit triggers.
+2. Configure the dedicated runtime DB role with SELECT/INSERT/UPDATE of `records`,
+   SELECT/INSERT of `audit_entries`, DELETE of expiring nonce records as required
+   by the record store, and sequence usage. It must not own/alter the schema or
+   audit triggers. Validate grants against the bank's policy before serving.
+3. Deliver `EXCHANGE_DATABASE_URL`, `EXCHANGE_HSM_PIN`, `EXCHANGE_FIELD_KEY` through
+   the bank's secret mechanism. The field key is a base64-encoded 32-byte data key.
+   Maintain protected backups/rotation procedures; changing it without migrating
+   ciphertext will make retained records unreadable.
+4. Start `exchange serve --config /config/node.yaml`. Node and officer public-key
+   possession is checked; missing production controls fail startup.
+5. Expose only 8443 to pinned peer networks. Keep 9443 and 8080 inside the bank.
+   Serve the UI/API through the bank's HTTPS ingress, configure trusted forwarding
+   correctly, register its exact OIDC redirect URI and enable PKCE/CORS at the bank
+   token endpoint. Never expose the internal REST API as the peer endpoint.
+6. Use `POST /api/bank/initialize` as a bank-authenticated administrator with fresh
+   MFA, or the signed officer `local.import` command. The REST path signs the exact
+   initialization hash using that administrator's HSM key. Initialize once for that node's
+   approved initial records. It refuses other roles' record families and subsequent
+   initialization. Confirm authoritative-book ownership and bank adapter mappings
+   before real activity; initialization is not continuous source-system integration.
 
-- `pytest -q`: unit, security and integration checks; preserve its exit status.
-- `exchange demo`: fresh local $500M assignment with generated keys, automated
-  fixture approvals, exact-price credit and unchanged register total.
-- `python -m sim.network`: four separate mTLS listeners/DBs/keys on loopback,
-  20 signed round trips and nine concurrent catalog checks.
-- `exchange verify-audit`: fail on a broken local audit chain.
-- `exchange certify --reference --output .local/certification`: signed JSON reference report;
-  not bank certification and not a go-live approval. No PDF is generated.
+Production hub inbox/outbox directories must be bank-owned and isolated from peers.
+The sender does not generate camt.054 credits; the bank hub supplies booked evidence.
+Keep payment outbox files/acknowledgment evidence for reconciliation. The current
+file adapter expects its configured inbox/archive path to be writable for moving
+processed files; use a bank-controlled drop/archive arrangement with appropriate
+least-privilege permissions.
 
-For a broken audit chain stop actions, preserve the database and investigate. Do
-not rewrite hashes or remove records to restore a passing result.
+## Health and validation
 
-## Pilot containers
+Peer `/v1/health` requires a pinned mTLS certificate. Local `/api/health` checks the
+node identity/database and is available only on the internal REST listener when
+bank OIDC is configured. It returns no trade values. Verify audit chains on demand
+with the bank auditor interface or `exchange verify-audit --database <local DSN>`;
+prefer secure environment/driver configuration instead of exposing credentials in
+shell history.
 
-Build with Docker BuildKit. In cloud TLS inspection environments supply the
-combined public CA bundle as the optional `proxy_ca` build secret. Never disable
-certificate verification. Runtime containers require no external internet.
+The automatic worker re-runs lender readiness after relevant signed gap events.
+An operator can invoke `local.readiness` or the local REST readiness endpoint.
+Settlement requires a seller request and an independent agent officer approval;
+requesting it before booked credit/prerequisites is refused.
 
-Compose uses an isolated internal network, a PostgreSQL volume and a node-data
-volume. Only the local REST port is bound to host loopback. Set the demo database
-password securely in the environment before running Compose. Never pass real bank
-credentials to this sandbox. `docker compose ... down` preserves volumes; adding
-`--volumes` destroys local reference data and should only be used intentionally.
+## Unknown network outcome
 
-The reference Helm chart supplies a PVC, unprivileged pod, probes, namespace-local
-ClusterIP, default-deny egress and restricted ingress from labeled UI-client pods.
-It is not a bank deployment chart; no HSM/KMS/SSO, peer ingress or signed updates
-are configured. Helm/Kubernetes execution must be validated in a real cluster.
+1. Preserve the outbox record and exact execution ID. Do not create a new trade,
+   delete the record, or change the payload to force a retry.
+2. An authorized local officer calls signed `local.reconcile` with `outbox_key`.
+   The remote execution-status answer is signature-verified and scoped to the
+   originating node. A found result resolves delivery without repeating effects.
+3. If still unknown, investigate connectivity and the remote node. An explicit
+   signed `local.execution.retry` may requeue that same immutable execution with
+   a required reason; the receiver ledger prevents a late original request and
+   this retry from producing two effects. No automatic financial retry occurs.
 
-For air-gapped **reference evaluation**, transfer the built image with
-`docker save -o exchange-reference.tar exchange-node:0.1.0` and load on the isolated
-host. Verify the transfer checksum out of band. These are unsigned development
-artifacts; they do not satisfy the spec's signed production release process.
+## Unknown payment-file outcome
 
-## Data, backup and recovery
+A crash while exporting marks the payment `NEEDS_RECONCILIATION`. Do not delete the
+XML/DB row, mark it paid, or issue another payment ID. Obtain the bank hub's durable
+acknowledgment/ledger and follow its approved reconciliation process. Automated
+bank-hub acknowledgment/retry integration is not yet supplied. Resume only through
+an approved bank recovery procedure; this is a go-live integration requirement.
 
-Stop the reference node before taking a SQLite backup. Preserve DB and all signing
-keys together, with restricted permissions; never restore keys into another bank's
-identity. For PostgreSQL use bank-standard backup/restore and encryption tooling.
-No key recovery, HSM backup, approved certificate rollover, disaster recovery or
-release rollback automation is supplied. A signed receipt proves what was signed,
-not that a payment left the bank. Do not mark a payment complete based on a file,
-a PID or a local simulation.
+## Acceptance and release
+
+`exchange certify --acceptance --deployment processes` runs four separate processes.
+`--deployment containers` runs four node containers and four private PostgreSQL
+containers, then removes only its own test resources. The acceptance harness
+provisions controlled credentials/books and transfers test hub evidence separately
+from the nodes. JSON/PDF reports have signatures and retain explicit bank-control
+limitations. Fixture success is not real money movement or a go-live approval.
+
+The default certification command exits 2 until bank evidence is available. Do not
+edit the report to claim eligibility. CI does not upload private fixture keys.
+
+Bank image signing, SBOM publication, approved updates, key/certificate rotation,
+backup/restore, network firewall policy and change-board approval require the
+institution's release process. The included Helm template has not been certified
+on a bank cluster. Pin and independently verify release images before use.

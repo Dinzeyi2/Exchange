@@ -1,5 +1,5 @@
 apiVersion: v2
-name: exchange-reference
-version: 0.1.0
-appVersion: 0.1.0
-description: Synthetic Exchange reference sandbox; production startup disabled
+name: exchange-node
+version: 0.2.0
+appVersion: 0.2.0
+description: One institution-local Exchange node with pinned peer transport and bank-controlled identity

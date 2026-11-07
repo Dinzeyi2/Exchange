@@ -16,7 +16,7 @@ from node.audit.store import Store
 from node.documents.agreement import agreement
 from node.signer.backends import SoftwareSigner
 from node.transport.protocol import ProtocolError
-from node.workflow.engine import OFFICERS, Workflow
+from prototype.legacy.workflow import OFFICERS, Workflow
 
 
 class Login(BaseModel):
@@ -56,7 +56,7 @@ def create_app(data_dir=None, password=None, seed_data=True):
     }
     workflow = Workflow(store, signer, officer_signers)
     if seed_data:
-        from sim.seed import seed
+        from prototype.legacy.seed import seed
 
         seed(workflow)
     app = FastAPI(title="Exchange reference sandbox", version="0.1.0")

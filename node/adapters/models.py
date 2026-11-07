@@ -120,6 +120,13 @@ class Ssi(Model):
     currency: str = "USD"
     effective_at: str
 
+    @field_validator("currency")
+    @classmethod
+    def usd_only(cls, value):
+        if value != "USD":
+            raise ValueError("only USD settlement instructions are supported")
+        return value
+
     @field_validator("aba")
     @classmethod
     def valid_aba(cls, value):

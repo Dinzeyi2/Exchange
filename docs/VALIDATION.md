@@ -1,37 +1,59 @@
-# Validation evidence
+# Validation — institution runtime 0.2.0
 
-Validated in this cloud workspace on 2026-11-07. These results describe the
-reference build, not production v1 or a fresh published environment.
+Executed in this cloud workspace on 2026-11-07. Evidence is for controlled acceptance
+fixtures, not a claim that a bank's live systems or money were used.
 
-- Python: **60 passed** (`.venv/bin/pytest -q`). One upstream Starlette warning about
-  its httpx test-client backend; no failed, skipped or expected-failure tests.
-- React/TypeScript: `npm --prefix ui run build` passed.
-- Browser: system Chromium through Playwright; login, seller proposal, officer
-  switching, KYC release, all remaining approval steps, synthetic credit, SETTLED,
-  audit, administration and mobile viewport passed; no JavaScript page errors.
-  The smoke runner starts and removes its own temporary sandbox.
-- Synthetic workflow: $500M principal at 99.75; 13 software-signed approvals; final
-  seller and buyer register positions $1.5B each, original total $3B preserved.
-  Last measured reference run: readiness 123.03 ms; credit-to-receipt 15.52 ms.
-  Approvals were automated in this timing run; they were separately clicked in
-  the browser run. This is a local synthetic wall-time measurement, not WAN SLA.
-- Peer network: four separate mTLS listeners with individual databases and signing,
-  agreement and TLS keys; 20 signed round trips, p95 19.96 ms; nine concurrently
-  dispatched signed catalog questions in 106.87 ms. All chains verified.
-  All listeners ran on loopback in one process. Not a four-bank settlement test.
-- Docker: multi-stage image built with TLS verification enabled and the environment
-  CA supplied as a build secret. Runtime served UI, health, authentication and
-  the authenticated dashboard.
-- PostgreSQL 16: full synthetic lifecycle, conserved register total and valid audit
-  chain. Two independent workflow/store instances raced the same settlement:
-  exactly one settled, the second received `task_not_pending`. Test containers
-  were removed by the runner.
-- Certification: signed reference JSON verifies; default go-live certification exits
-  with status 2. `--reference` succeeds only for the explicitly scoped reference
-  checks and retains `go_live_eligible: false`.
+## Final four-container acceptance
 
-Not validated: bank HSM/KMS/SSO, official payment scheme XSDs, four-container full
-settlement, privacy reports for distributed actions, Helm/Kubernetes runtime,
-20 concurrent trades, sustained throughput, bank WAN latency, signed production
-updates, go-live certification or publication. See STATUS.md for requirements
-that still need implementation rather than just external configuration.
+The final image was built after implementation changes and exercised as **four
+institution containers plus four independent PostgreSQL containers**. Each node
+had only its own config/private keys, data volume and DB credential. Its database
+network was isolated from the other institutions. Peer/officer access used pinned
+mutual TLS, including the negative security tests.
+
+- All four states: **CLOSED**.
+- Trade principal: **$500M**, price **99.75**, exact seller credit **$498.75M**.
+- Agent total: **$3B unchanged**. Seller and buyer positions: **$1.5B each**.
+- Trade entry → ready: **2,513.31 ms** wall time, including automated fixture approvals.
+- Booked agent credit → all receipts: **778.07 ms** wall time.
+- **13** signed action approvals, including three-party SSI control and callback reference.
+- **13** negative/idempotency checks passed over actual container mTLS connections.
+- **482 audited envelope instances** and **28 transported officer-approval instances**
+  independently verified. Counts include copies/broadcast records; they are not
+  claims of that many distinct trades or unique approvals.
+- All four audit chains independently recomputed; privacy disclosures checked.
+- Same execution returns its original result, conflicting reuse is refused and a
+  second settlement is refused without changing the register again.
+
+The signed evidence is [report.json](acceptance/report.json),
+[report.pdf](acceptance/report.pdf) and its [detached signature](acceptance/report.pdf.sig.json).
+The JSON includes the tested host source digest and actual container image digest.
+The evidence signing key remains outside Git; the report's public key is provided
+for integrity verification, not as a bank/go-live trust anchor.
+
+## Additional checks
+
+- **79 Python tests passed**, including independent-process acceptance, OIDC
+  signature/audience/issuer/MFA rejection, DB identity isolation, encrypted-record
+  context/tamper detection, restart uncertainty and local REST approval boundaries.
+  The suite also retains historical prototype regression tests; those are not
+  represented as production-node coverage. One upstream Starlette test-client
+  deprecation warning remains.
+- TypeScript/Vite build passed.
+- Chromium browser test passed institution login view, pinned test JWT authentication,
+  local trade entry, officer-signed proposal approval, mobile layout and sign-out;
+  no JavaScript page errors. That test uses a test IdP key and PKCS#11 software test
+  double, **not** a real bank IdP/HSM. It is separate from the container lifecycle.
+- JSON signature, PDF hash and detached PDF signature verified independently. PDF
+  parsed successfully as a one-page document.
+- Default go-live certification returns status 2; explicit `--acceptance` succeeds.
+- Python style/import checks and Git whitespace checks passed.
+
+## Not established by these results
+
+Actual bank HSM/IdP/KMS integrations, live authoritative loan-system adapters,
+approved legal/consent rules, official bank ISO scheme/XSD behavior, genuine money
+movement, bank WAN/sustained-load targets, key rotation, operational recovery,
+Kubernetes runtime, signed production updates or independent security approval.
+These remain listed in STATUS.md and in the signed report. No environment publish,
+external deployment or bank go-live approval is inferred from this run.

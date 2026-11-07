@@ -1,0 +1,37 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "documents": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Documents",
+      "type": "object"
+    },
+    "hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Hashes",
+      "type": "object"
+    },
+    "approval": {
+      "additionalProperties": true,
+      "title": "Approval",
+      "type": "object"
+    }
+  },
+  "required": [
+    "execution_id",
+    "documents",
+    "hashes",
+    "approval"
+  ],
+  "title": "ReleasePackage",
+  "type": "object"
+}

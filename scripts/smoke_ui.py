@@ -1,131 +1,193 @@
-import atexit
+"""Browser integration test with a test IdP key and a software PKCS#11 test double.
+
+This is a test fixture, not a production authentication path or issuer.
+"""
+
+import base64
 import json
 import os
-import secrets
-import subprocess
+import socket
 import tempfile
+import threading
 import time
-import urllib.request
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
+import uvicorn
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from playwright.sync_api import sync_playwright
 
-password = secrets.token_urlsafe(24)
-temporary = tempfile.TemporaryDirectory()
-server = subprocess.Popen(
-    [".venv/bin/exchange", "serve", "--port", "8001"],
-    env={
-        **os.environ,
-        "EXCHANGE_DATA_DIR": temporary.name,
-        "EXCHANGE_DEMO_PASSWORD": password,
-    },
-    stdout=subprocess.DEVNULL,
-    stderr=subprocess.DEVNULL,
-)
+from certify.provision import fixtures, provision
+from node.api.local import create_app
+from node.identity.crypto import public_bytes
+from node.runtime.config import Settings
+from node.runtime.service import Node
+from node.signer.backends import SoftwareSigner
 
 
-def cleanup():
-    server.terminate()
-    server.wait(timeout=10)
-    temporary.cleanup()
+def enc(value):
+    return base64.urlsafe_b64encode(value).decode().rstrip("=")
 
 
-atexit.register(cleanup)
-for attempt in range(100):
-    try:
-        urllib.request.urlopen("http://127.0.0.1:8001/api/health", timeout=1)
-        break
-    except Exception:
-        time.sleep(0.1)
-else:
-    raise RuntimeError("sandbox did not start")
-Path(".local/screenshots").mkdir(parents=True, exist_ok=True)
-errors = []
-with sync_playwright() as p:
-    browser = p.chromium.launch(
-        executable_path="/usr/bin/chromium", headless=True, args=["--no-sandbox"]
-    )
-    page = browser.new_page(
-        viewport={"width": 1440, "height": 1060}, device_scale_factor=1
-    )
-    page.on("pageerror", lambda error: errors.append(str(error)))
-    page.goto("http://127.0.0.1:8001")
-
-    def login(officer):
-        page.get_by_label("Demo officer").select_option(officer)
-        page.get_by_label("Sandbox password").fill(password)
-        page.get_by_role("button", name="Enter workspace").click()
-        page.get_by_role("heading", name="A clearer path to settlement.").wait_for()
-
-    login("seller-trader")
-    page.screenshot(path=".local/screenshots/overview.png", full_page=True)
-    page.get_by_role("button", name=__import__("re").compile("^Approvals")).click()
-    page.locator(".inbox-card").first.click()
-    page.get_by_role("button", name="Approve & sign").click()
-    page.get_by_text("Approval signed and recorded.").wait_for()
-    assert page.locator(".page-heading .pill").inner_text() == "Gaps Open"
-    page.screenshot(path=".local/screenshots/trade.png", full_page=True)
-    page.get_by_role("button", name="Sign out / switch demo officer").click()
-    login("buyer-ops")
-    page.get_by_role("button", name=__import__("re").compile("^Approvals")).click()
-    page.locator(".inbox-card").first.click()
-    page.get_by_role("heading", name="Kyc Release", exact=True).wait_for()
-    page.get_by_role("button", name="Approve & sign").click()
-    page.get_by_text("Approval signed and recorded.").wait_for()
-    page.screenshot(path=".local/screenshots/approval.png", full_page=True)
-    for officer in [
-        "buyer-treasurer",
-        "agent-officer",
-        "agent-second",
-        "agent-kyc",
-        "agent-officer",
-        "borrower-treasurer",
-        "seller-signatory",
-        "buyer-signatory",
-        "agent-officer",
-        "buyer-treasurer",
-    ]:
-        page.get_by_role("button", name="Sign out / switch demo officer").click()
-        login(officer)
-        page.get_by_role("button", name=__import__("re").compile("^Approvals")).click()
-        page.locator(".inbox-card").first.click()
-        page.get_by_role("button", name="Approve & sign").click()
-        page.get_by_text("Approval signed and recorded.").wait_for()
-    page.get_by_role("button", name="Sign out / switch demo officer").click()
-    login("agent-officer")
-    page.locator(".trades-table tbody tr").first.click()
-    page.get_by_role("button", name="Simulate booked credit").click()
-    page.locator(".task-line").filter(has_text="Settle Execute").click()
-    page.get_by_role("button", name="Approve & sign").click()
-    page.get_by_text("Approval signed and recorded.").wait_for()
-    page.locator(".page-heading .pill").filter(has_text="Settled").wait_for()
-    page.screenshot(path=".local/screenshots/settled.png", full_page=True)
-    page.get_by_role("button", name="Audit log", exact=True).click()
-    page.get_by_text("Audit chain verified").wait_for()
-    page.get_by_role("button", name="Administration", exact=True).click()
-    page.get_by_text("Development sandbox · Production startup disabled").wait_for()
-    page.set_viewport_size({"width": 390, "height": 844})
-    page.get_by_role("button", name="Overview", exact=True).click()
-    page.screenshot(path=".local/screenshots/mobile.png", full_page=True)
-    assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
-    browser.close()
-assert not errors, errors
-print(
-    json.dumps(
-        {
-            "browser": "system Chromium",
-            "passed": [
-                "login",
-                "dashboard",
-                "seller proposal approval",
-                "officer switch",
-                "KYC release approval",
-                "audit view",
-                "admin view",
-                "mobile viewport",
-                "full assignment settled through browser approvals",
-            ],
-            "console_errors": errors,
+def main():
+    with tempfile.TemporaryDirectory() as root:
+        root = Path(root)
+        manifest = provision(root / "nodes")
+        entry = manifest["nodes"]["seller"]
+        with socket.socket() as sock:
+            sock.bind(("127.0.0.1", 0))
+            port = sock.getsockname()[1]
+        issuer = Ed25519PrivateKey.generate()
+        jwks = root / "jwks.json"
+        jwks.write_text(
+            json.dumps(
+                {
+                    "keys": [
+                        {
+                            "kid": "test-bank",
+                            "kty": "OKP",
+                            "crv": "Ed25519",
+                            "x": enc(public_bytes(issuer.public_key())),
+                        }
+                    ]
+                }
+            )
+        )
+        config = Settings.load(entry["config"]).model_dump()
+        config["oidc"] = {
+            "issuer": "https://test-bank.internal",
+            "audience": "exchange-api",
+            "jwks_file": str(jwks),
+            "subjects": {"employee-1": "seller-trader"},
+            "authorization_endpoint": "https://test-bank.internal/authorize",
+            "token_endpoint": "https://test-bank.internal/token",
+            "client_id": "exchange-ui",
+            "redirect_uri": "https://test-node.internal/",
         }
-    )
-)
+        config["officer_hsm_labels"] = {
+            o["officer_id"]: o["officer_id"] for o in config["officers"]
+        }
+
+        def test_hsm(module, token_label, key_label, pin, public_key):
+            key = Path(manifest["officers"][key_label]["signing_key"]).read_bytes()
+            return SoftwareSigner(
+                serialization.load_pem_private_key(key, password=None)
+            )
+
+        with (
+            patch.dict(
+                os.environ, {**entry["env"], "EXCHANGE_HSM_PIN": "test-fixture-only"}
+            ),
+            patch("node.api.local.HsmSigner", test_hsm),
+        ):
+            node = Node(Settings.model_validate(config))
+            ticket, books = fixtures()
+            node.local(
+                SimpleNamespace(node_id="seller-admin"),
+                SimpleNamespace(type="local.import", body=books["seller"], trade_id=""),
+            )
+            app = create_app(node)
+        server = uvicorn.Server(
+            uvicorn.Config(
+                app, host="127.0.0.1", port=port, access_log=False, log_level="error"
+            )
+        )
+        thread = threading.Thread(target=server.run, daemon=True)
+        thread.start()
+        while not server.started:
+            time.sleep(0.05)
+        now = time.time()
+        claims = {
+            "iss": "https://test-bank.internal",
+            "aud": "exchange-api",
+            "sub": "employee-1",
+            "exp": now + 120,
+            "iat": now,
+            "auth_time": now,
+            "amr": ["pwd", "mfa"],
+        }
+        raw = (
+            enc(json.dumps({"alg": "EdDSA", "kid": "test-bank"}).encode())
+            + "."
+            + enc(json.dumps(claims).encode())
+        )
+        token = raw + "." + enc(issuer.sign(raw.encode()))
+        errors = []
+        try:
+            with sync_playwright() as playwright:
+                browser = playwright.chromium.launch(
+                    executable_path="/usr/bin/chromium",
+                    headless=True,
+                    args=["--no-sandbox"],
+                )
+                page = browser.new_page(viewport={"width": 1440, "height": 1000})
+                page.on("pageerror", lambda e: errors.append(str(e)))
+                page.goto(f"http://127.0.0.1:{port}")
+                page.get_by_role("button", name="Sign in with bank SSO").wait_for()
+                assert page.get_by_text("Sandbox password").count() == 0
+                page.evaluate(
+                    '(value)=>sessionStorage.setItem("exchange-token",value)', token
+                )
+                page.reload()
+                page.get_by_role(
+                    "heading", name="A clearer path to settlement."
+                ).wait_for()
+                page.get_by_role("button", name="New trade", exact=True).click()
+                page.get_by_label("Trade reference").fill(ticket["terms"]["trade_id"])
+                page.get_by_label("Facility identifier").fill(
+                    ticket["terms"]["facility_id"]
+                )
+                page.get_by_label("Principal (USD)").fill("500000000")
+                page.get_by_label("Price (%)").fill("99.75")
+                page.get_by_label("Settlement date").fill(
+                    ticket["terms"]["settlement_date"]
+                )
+                page.get_by_role("button", name="Create draft trade").click()
+                page.get_by_text(
+                    "Trade created. Proposal approval is waiting on the seller trader."
+                ).wait_for()
+                page.locator(".trades-table tbody tr").first.click()
+                page.get_by_role("button", name="Approve & sign").click()
+                page.get_by_text("Approval signed and recorded.").wait_for()
+                page.locator(".page-heading .pill").filter(
+                    has_text="Proposed"
+                ).wait_for()
+                out = Path(".local/screenshots")
+                out.mkdir(parents=True, exist_ok=True)
+                page.screenshot(path=str(out / "institution-trade.png"), full_page=True)
+                page.set_viewport_size({"width": 390, "height": 844})
+                assert page.evaluate(
+                    "document.documentElement.scrollWidth <= window.innerWidth"
+                )
+                page.get_by_role("button", name="Sign out", exact=True).click()
+                page.get_by_role("button", name="Sign in with bank SSO").wait_for()
+                browser.close()
+            assert not errors, errors
+            print(
+                json.dumps(
+                    {
+                        "passed": [
+                            "bank-SSO login view",
+                            "pinned test JWT API authentication",
+                            "local trade entry",
+                            "officer-signed proposal approval",
+                            "role-local data",
+                            "mobile layout",
+                            "sign out",
+                        ],
+                        "page_errors": errors,
+                        "hardware_scope": "PKCS#11 test double; real bank IdP/HSM not tested",
+                    }
+                )
+            )
+        finally:
+            server.should_exit = True
+            thread.join(timeout=10)
+            node.pool.shutdown()
+            node.store.engine.dispose()
+
+
+if __name__ == "__main__":
+    main()

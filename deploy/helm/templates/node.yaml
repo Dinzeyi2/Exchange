@@ -19,40 +19,55 @@ spec:
     matchLabels: {app: {{ .Release.Name }}}
   template:
     metadata:
-      labels: {app: {{ .Release.Name }}}
+      labels: {app: {{ .Release.Name }}, exchange-role: {{ .Values.role }}}
     spec:
       securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001, fsGroup: 10001}
       containers:
-        - name: reference
+        - name: exchange
           image: {{ .Values.image | quote }}
-          ports: [{name: local-api, containerPort: 8000}]
-          env: [{name: EXCHANGE_MODE, value: demo}]
+          ports: [{name: peer, containerPort: 8443}, {name: local-api, containerPort: 8080}]
+          envFrom:
+            - secretRef: {name: {{ .Values.runtimeSecret }}}
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities: {drop: [ALL]}
           resources:
-            requests: {cpu: "500m", memory: 512Mi}
+            requests: {cpu: "1", memory: 1Gi}
             limits: {cpu: "4", memory: 8Gi}
           readinessProbe:
             httpGet: {path: /api/health, port: local-api}
+            periodSeconds: 5
+            failureThreshold: 3
           livenessProbe:
             httpGet: {path: /api/health, port: local-api}
+            periodSeconds: 15
+            failureThreshold: 4
           volumeMounts:
             - {name: data, mountPath: /data}
+            - {name: config, mountPath: /config, readOnly: true}
             - {name: temp, mountPath: /tmp}
       volumes:
         - name: data
           persistentVolumeClaim: {claimName: {{ .Release.Name }}-data}
+        - name: config
+          secret: {secretName: {{ .Values.configSecret }}, defaultMode: 0440}
         - name: temp
           emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
-metadata: {name: {{ .Release.Name }}}
+metadata: {name: {{ .Release.Name }}-peers}
 spec:
   selector: {app: {{ .Release.Name }}}
-  ports: [{name: local-api, port: 8000, targetPort: local-api}]
+  ports: [{name: peer, port: 8443, targetPort: peer}]
+---
+apiVersion: v1
+kind: Service
+metadata: {name: {{ .Release.Name }}-local}
+spec:
+  selector: {app: {{ .Release.Name }}}
+  ports: [{name: local-api, port: 8080, targetPort: local-api}]
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -62,6 +77,24 @@ spec:
     matchLabels: {app: {{ .Release.Name }}}
   policyTypes: [Ingress, Egress]
   ingress:
+    {{- range .Values.peerCidrs }}
+    - from: [{ipBlock: {cidr: {{ . | quote }}}}]
+      ports: [{protocol: TCP, port: 8443}]
+    {{- end }}
     - from: [{podSelector: {matchLabels: {exchange-local-ui-client: "true"}}}]
-      ports: [{protocol: TCP, port: 8000}]
-  egress: []
+      ports: [{protocol: TCP, port: 8080}]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {k8s-app: kube-dns}
+      ports: [{protocol: UDP, port: 53}, {protocol: TCP, port: 53}]
+    {{- range .Values.peerCidrs }}
+    - to: [{ipBlock: {cidr: {{ . | quote }}}}]
+      ports: [{protocol: TCP, port: 8443}]
+    {{- end }}
+    {{- range .Values.databaseCidrs }}
+    - to: [{ipBlock: {cidr: {{ . | quote }}}}]
+      ports: [{protocol: TCP, port: 5432}]
+    {{- end }}

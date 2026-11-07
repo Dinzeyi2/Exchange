@@ -1,0 +1,20 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "question": {
+      "title": "Question",
+      "type": "string"
+    },
+    "params": {
+      "additionalProperties": true,
+      "title": "Params",
+      "type": "object"
+    }
+  },
+  "required": [
+    "question",
+    "params"
+  ],
+  "title": "Readiness",
+  "type": "object"
+}

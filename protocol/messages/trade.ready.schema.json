@@ -1,0 +1,30 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "terms_hash": {
+      "title": "Terms Hash",
+      "type": "string"
+    },
+    "document_hash": {
+      "title": "Document Hash",
+      "type": "string"
+    },
+    "approvals_hash": {
+      "title": "Approvals Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "execution_id",
+    "terms_hash",
+    "document_hash",
+    "approvals_hash"
+  ],
+  "title": "Ready",
+  "type": "object"
+}

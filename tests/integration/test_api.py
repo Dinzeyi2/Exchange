@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
-from node.api.app import create_app
-from sim.seed import sample_terms
+from prototype.legacy.api import create_app
+from prototype.legacy.seed import sample_terms
 
 
 def test_login_dashboard_approve(tmp_path):

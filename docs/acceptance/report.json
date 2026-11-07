@@ -1,0 +1,1512 @@
+{
+  "version": "0.2.0",
+  "host_source_tree_sha256": "7bbbabebd025b02a8e057fc7bb98a7fc6a2ab3faac7b353719603d164bf93d97",
+  "scope": "distributed acceptance with controlled bank fixtures",
+  "status": "distributed_acceptance_passed",
+  "ts": "2026-11-07T23:34:32.136+00:00",
+  "result": {
+    "trade_id": "LT-20261107-DISTRIBUTED",
+    "states": {
+      "seller": "CLOSED",
+      "buyer": "CLOSED",
+      "agent": "CLOSED",
+      "borrower": "CLOSED"
+    },
+    "register_conserved": true,
+    "seller_payment_reconciled": true,
+    "duplicate_trade_refused": true,
+    "all_audit_chains_valid": true,
+    "timings": {
+      "entry_to_ready_wall_ms": 2513.308118000168,
+      "funds_to_receipts_wall_ms": 778.0685309999171
+    },
+    "approval_count": 13,
+    "security_checks": {
+      "unauthorized_question_refused": true,
+      "wrong_peer_question_refused": true,
+      "replay_refused": true,
+      "stale_refused": true,
+      "tampered_envelope_refused": true,
+      "tls_sender_binding": true,
+      "non_seller_settlement_refused": true,
+      "settlement_without_approvals_refused": true,
+      "bad_aba_refused": true,
+      "missing_kyc_document_refused": true,
+      "same_execution_returns_original_result": true,
+      "execution_payload_conflict_refused": true,
+      "second_settlement_refused": true
+    },
+    "signature_verification": {
+      "verified_node_envelopes": 482,
+      "verified_officer_approvals": 28,
+      "tampered_receipt_refused": true,
+      "tampered_answer_refused": true
+    },
+    "privacy": {
+      "seller": {
+        "node_id": "seller",
+        "incoming_messages": [
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "cd041e3f80587a43e3e634dd5b1fca30beb0f07a131c355a3d64e57bdaa6b8a7"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "efe6cc1fe16b8d13cb3d1d61aa2fae912490422e20bfef2e8030137dee99ddae"
+          },
+          {
+            "from": "buyer",
+            "type": "trade.affirm",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "c0fbc0988ce69cb8bb5e8549ba415aedd884beab2d95b1480647f4fafda2b124"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b95745f14561878a5df6e376e36ea4f6587ccafe38d94a2664a18cb7300c9ed7"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6ed1d023f6359a396ef9a86a23b3b6670ecf1375d2b8ff4ffd32e6e8149d22b8"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "c62089abb5b4454122b16312ef7b5d0303a1124676fb70384736a5e0c08faf6a"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "7f18a58d0171ccb0c94e7fa00a904dc5b1a0327bfe823d8390df2ab85d37ea21"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "17735ba6cc135587f7ee7cb2bea0024a7c6d1c65098a36cd134c48cbf5ed489f"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "1a8c783cfe4d1ad7c0eef0f9cda3255bacb8c6bbac9839dab2886646247476d6"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "933afac0dd4f73fe0fbe862eb7cbc14b39a09b214ea6d0a82489f36cf63ea014"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "4fddb63e9cdc61f7d82c0195424024cac70d6d5a3bf3b653856199c0adb01381"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "06dfad4d3e49e3aa04e8bc4f53a8aa64bb7140fc0d1c5c6618195172f3dbe589"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "dae2f44dd085aaf7d93a8b883a963e5cd3cb658e00f44c7f766fcd4bb54f1238"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "3a9539659e24453a35477b0525290e801b5672e195122e3ca273e7d8b848cb44"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "93f6f799fba1a83bfb6c1eac285dbf2b9760800ba5f798035c2f68e39fd1c5a7"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "92af08d02e1e62908d30a7b52649a87bfce9d54d1819eb5eaf89397b8de3348f"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "2cb52a79e6746079a9c51d92a666eacc12ab094dc66b7b054cc0476734acdae2"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "8acacf5d8d332e4e3a137f77696c02256efcdb12e44c83e966f684b06f5cd6dd"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "80d9ac215ee4d3505fad11e06ed586c216c1c6b9ed49a14c23bcf2d04ff995ae"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "2dc0a8beec301ebb43957c36df927fcd3cf84073ee014e0d6a05b2c73a6be2ad"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "89785592403ff86896df037a3e21f8f4520793efd56e78eb60a71b049f9635c6"
+          },
+          {
+            "from": "agent",
+            "type": "kyc.clear",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "c8b5a2d6753d8d1d5c49be096c8be3ed99a7c4dd566c6fa085b321579576216b"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "ee70f1d08b66597b5bdf6fa63c2f6e509d9039fc25a3f8f74af049d06db56862"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "ece3200b2abd6d75ca35efaa23af5464816d81106ae84223749b67c67c17e131"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b5506d74c61932c3d689238b9e268e0e143555c3a0edcebb30b92c9bd2423f8d"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "4d170d3e919817e8d90811825a95419dc79d9b0ac326fc5692b0212834cdc843"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f1eed1e322938a3d6221285d0af82c45f2b4a8bae9ffc6ce1fcfa0551a8c3c42"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "422bcace1551b39cf2e95e909833fc754ac26b9352faf95796d7cf7d0b07fbf5"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "193f97762177d2f07c8c2bd9f594e2b5686a1d6a57f83947d672354eec832e6a"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "1d7e6b94529dc684cb6fed5f22c1c1e59b004f9a3e9323740a508f90e3423eb9"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f440c14c1b37a3842ed880efb10cd28a3a53f25c7588ce54bbb4655342823309"
+          },
+          {
+            "from": "agent",
+            "type": "consent.agent",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "0985282fbe08a0ed146f35b8bad8a0055f05af42ee742da856f9b96d25060197"
+          },
+          {
+            "from": "agent",
+            "type": "doc.request",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "5e1af23f7ae06cfdd8c2d95fa03bf6c411244e0e2e9557ed461a6d3d1850986f"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "1d0c5f2bb1210a05803e3a6c9c81554c41e13db66577e48c2b9d066dff94be25"
+          },
+          {
+            "from": "agent",
+            "type": "trade.ready",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d463c8307554a41a3b34684af8fbf6507bbe9a9c15d37fa4a71df6d6d6592de6"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "aff03dd3890d061893c712b2d9fd78ff5fe14cb192c98aef01943048ab906aaf"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b04b4574a576b9ecd4b63533270ea568ab05816370c84d024e78b5a17f5eca98"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "5aef520ae41bff848ce12d035370909283ca17a6fe0440712bd27e158b4d0d29"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "86545f457de3b4aed3fdcbf3f63bff3c2ff7cd165fdb0d4086d00fa6007d9fa7"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "8992aa6c88697acb69007a002a8ac96b33e3c7c3338169f555b1e7c6f55353b2"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b9fa4852d2da9b5cbb41e85efb2bac7b1d5752b7f4a9aa248387d4cb45d77c30"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "adb11cf55ead7c55615e7dce63e1cae3ef63080ade2b66516a026312bdb120a7"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "07ba5381fd67a39ceb61f79bfcedaf6f439969921b326fd86ddf3fdd9dc61021"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e338da4b7af83acf22a153103e1c99066ec4058fd83508c7240d38d1fe84727a"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "548d33c51ad6988d9aa50f7b6cdfaa9fa81add91082538d4f0bf88535415291e"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "556e1a50d16ac8819f95e9ae6de8e8d5d1dcb1a01838715ee74414a9ff484364"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b8be6cfcc8b0a80762b9df3fd1b59751cb1117a68cf7152e1314275ee8c7fff4"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "3314e647caee35909713c1656b105459ca95096bb47ffc6d363d001cfe039ccc"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e0f09b28303942be480fe4ff929f1a1a37ac3d5854b821295e4a1689d5ce1c6a"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "ccdc80f9886960b1fa0f7c440e9f052f01690fa74334a8a4d22f8217215584a3"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "5e53b78e27a46d7b8fd9ca92a2ce645ef45e01c1ac65cc0c999a09679ca431b0"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "57a366adbf52a3c9d016a55dc5ff81e9f13684721334b0d59f4c31dbdc086b8c"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "debb09c1de89f782bf23fdfe012ec0f7749923576532b331d4cee41461e59c3d"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "8158695e73f74cad10a5cbcca19cb28647e49e564be5bdfe8f175fa3654c19cc"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "cc323e0db3e5c2f2e1fd06b5ab1f9a384e68b4dbe3d4058155ba0c3c08889ce9"
+          },
+          {
+            "from": "agent",
+            "type": "settle.receipt",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a3ad74a1bf79442baf6c62a7febbb418248cd7586640981b013d98b20ac63fb2"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e1c550d8107d323a255e26d00e8c7c422554ce2d335d0ded3cce469e3a996d81"
+          }
+        ],
+        "buyer_account_disclosed": false,
+        "buyer_kyc_disclosed": false,
+        "borrower_received_price": null
+      },
+      "buyer": {
+        "node_id": "buyer",
+        "incoming_messages": [
+          {
+            "from": "seller",
+            "type": "trade.propose",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b13b1c2c7a49b10a79c6dd0fd7abc996c0d8c74664299af129dc01d1bc744c07"
+          },
+          {
+            "from": "seller",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "0dfcfcd941e18caea167b0081f34164a6ad21af2defe6eb4916c4dbe9a2480dd"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "ea2fd40241f27b9357feeed66696c77a1f11e07d1e6bb5b5f737a78f36ec7672"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f339df466020b1df8ca60d86f43add9608c44c8e6e57d5c908d401cc5ebdadaa"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "748446ddcd8e8aba0519e867571f4948992ebe3d08587652f3f8daa79072d012"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "3267077bc284716badfb86e3836df405a643901c525770cb3416e9a4c69726cc"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f0792df085fd191ebaf65e906a73913cca6bf7b3ac9bfc6e6b1e9235aedce18f"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "2cf43a811cefa3f580e423cd2ffe646797b98f05c62c05226e89768039fe108e"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "836f6d83be769d803c20fb02fbc9b8946d95699e067031a75393e7a1f1f87803"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "41e76da1458a4d48df7dcb94cc037cffb5a060cb1bb1ff319e051c4f19c725e2"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "be0f03ccf909ce18ed7a0d494f26b126b9e685dd317141aab1de3a589b1f6f6e"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "875774f771639c18d0b3670d9959d1133adb9c3d1bf0715963b21bbb0a23d3e0"
+          },
+          {
+            "from": "agent",
+            "type": "kyc.request_package",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "824bef917be32ce5d276b2acf98eb2c08d543780e7a40145fe16920b04b7b052"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f339df466020b1df8ca60d86f43add9608c44c8e6e57d5c908d401cc5ebdadaa"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "748446ddcd8e8aba0519e867571f4948992ebe3d08587652f3f8daa79072d012"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "7b7aa4173668ce0e185721b8474fd4a5f8dfcf700168a0e7a43230822df25516"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "8070780c0937754aebb67ab931a6b390bbf7798bb13c8b3e5b0d298a059d91ef"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "41de475ad55103ac2ce58588b42733d30b9300e7b96daad3f4d300aec9ec59c4"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "56f77d27db324da3817893d91365c8ceb02f9654767381513c77f218042ee533"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e96b9a4951ef448c98bd6d4308a18eb398f8d0b792b9851b9a4fe05a5236100b"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bf1569431315709169f620e46ec4456fd380afacce8a36e6fe12ddd766a3fb7a"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "599a55f10461e4ee44adbecb1e929c5198e347af6556ea4e6d28abadd3b0441e"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "58895ad79b59289176547c44f628672994f312439200298d05b7b6cfb524e876"
+          },
+          {
+            "from": "agent",
+            "type": "kyc.clear",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "771e4baff1321cf2febb0eebf00fc1eb248fed5c1399de955066a1a35e4df363"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f339df466020b1df8ca60d86f43add9608c44c8e6e57d5c908d401cc5ebdadaa"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "748446ddcd8e8aba0519e867571f4948992ebe3d08587652f3f8daa79072d012"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "8d9716f776699f999286a92de0d1419fb68825bb3e86acc6fd371f59da090b60"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d19abecd9ac062956051292c51dbaf9187b6e8df7fc806f5841d5d4819d3b794"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "399f20862c07acfe242ed06e4cad7f56c5d348df04c92800ad29228d5599177f"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "eb1d7c49a3f8a430c8b09e91de815161ee616a5a9f6254091af9ec8e0ab8df38"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "36ec0534f7464d52c40c8b9a796bdd4562a92da4d021b888f130803075f1859b"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "72683679cc212559b6966021d53e008e31353d5dedb77714f5e57b4915f7fec0"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "0eb547867829fcfcd133c3378dbfa95724b92cc8d4c1d50f3ece1f053cbf22a7"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "667af51881155ccdcc20425d21914009e461adf1f3957b0af38deed4c791c2ad"
+          },
+          {
+            "from": "agent",
+            "type": "ssi.confirm",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d1e9b788440f3af51589e346141b7f7a7724bcbe7ebb21748de7d2ae4c41c199"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "86a93c4d3713b827ac50c229cde701721de0058198c245d5767b2a068cfe2c9d"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a61709f971843f8875d3ccdd2e36a1e82825187b20384f556aa378d253c41df8"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b39b875b5b752d1940449f221ae16762093df311dcd2f6b76862d193398feb8f"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "0b4b02c9602ec7dc1f69384423a25886c3c6387aa078e1b664f5c63dc3417370"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "41dd3f0ba766279b828fccb7f73a51ca7092e91e565538e31e3a8c6aa3923081"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f332df1c640198aa91896299ebe19d19da302a5626ba82ed3e378bf4da477bf7"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a44b7b29c23e6d0166cffcd0a40e5b9871bf7b2aca24f7e4dd48c145abf76fc2"
+          },
+          {
+            "from": "agent",
+            "type": "consent.agent",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "36611fa30f551c63a11260ec7898dc53419ac13a8db794361c0ec9ed3a5601be"
+          },
+          {
+            "from": "agent",
+            "type": "doc.request",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d11809be0655d42d531afd661da6eba79c5a75cca488999006740b279476b1c3"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "0bc483a785fcda153799d6602fa5640068030ccc27b93eac6581f67b68475d2e"
+          },
+          {
+            "from": "agent",
+            "type": "trade.ready",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "4a216b78cf1695376986e75b99be573ed17606eed3a524691bc585b4420becff"
+          },
+          {
+            "from": "seller",
+            "type": "funding.request",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b5e38ac41a72bf35cfe8aec4a078e1e5d6574e60cf1551dd858b9ef436c7d9da"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f339df466020b1df8ca60d86f43add9608c44c8e6e57d5c908d401cc5ebdadaa"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "748446ddcd8e8aba0519e867571f4948992ebe3d08587652f3f8daa79072d012"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d52b892c19d6b663bbf16b85828b0546bb95434f650c4ac5b2a63b35699b12ce"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "cf383e9eff0d0d454e2081b42b4ea808242fc652918776c9d06e881c175e9227"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d7f970aa2db68354705730c94b7f03e24c30d3a20ee5c52d7f906281d77b02c7"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "50d92f27ad93549125740d69862bc98c0090883bcd86d475dc4c1f862027e143"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "028bbd46096ae171d90f6cced48f330313ee7e003d4401678f8bd3edd358e711"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b4dadcab6224df03bc6b250ad88e1294a956c2c75018f548ef0ce2089ece0aec"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "1a947065a7d41838f0ba940c4f84319a42548a1b1ec8bde7a8e25c298a910da6"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "fd93ab4f82c1c31a1f83f9644bd997c2177056c52201e84168329878c609471d"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "748446ddcd8e8aba0519e867571f4948992ebe3d08587652f3f8daa79072d012"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f339df466020b1df8ca60d86f43add9608c44c8e6e57d5c908d401cc5ebdadaa"
+          },
+          {
+            "from": "agent",
+            "type": "settle.receipt",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a3ad74a1bf79442baf6c62a7febbb418248cd7586640981b013d98b20ac63fb2"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "522c4eca373c50d62a447225d841c0a17569277c513c635d9c15328267cf2ae7"
+          }
+        ],
+        "buyer_account_disclosed": false,
+        "buyer_kyc_disclosed": false,
+        "borrower_received_price": null
+      },
+      "agent": {
+        "node_id": "agent",
+        "incoming_messages": [
+          {
+            "from": "seller",
+            "type": "trade.propose",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "601e37c5d43c4d70f9607c83c1652653bbaf09315f7556638bde622bc619d10f"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f7d6b19fbc0b8c7730e81c0b761c11b89314cefec4e95ef36da2027f6ad36ab8"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6f653942365a897db5e5ec5e7cb7e80819857c6e88531cdcb9455fd6efb89917"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a61aa90d3d38882830dd425a49396f6554fb929dfce815ac0cce29235d085b44"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "fafcce943bfd420ace3bc4ae75ca74ef4e2cef35087d2a9238c50f42375a8890"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6f16ac54bf84d7434c0183d1135baaef9a27539a15cef6843a7d31bf18d4c1cb"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "borrower",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "buyer",
+            "type": "trade.affirm",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "7399ffa14709d221129d196ac76df57b103280649b97d308d987118ac17011b3"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f844fc9491feacfa2293d3c0402ed564b85b5ba35a32578b6d38404dbcdaca08"
+          },
+          {
+            "from": "buyer",
+            "type": "settle.execute",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e0b9b1b0ce294a3f85ab10323c7bd76bab42b2824dbbd418b52b4510558538f1"
+          },
+          {
+            "from": "seller",
+            "type": "settle.execute",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e0b9b1b0ce294a3f85ab10323c7bd76bab42b2824dbbd418b52b4510558538f1"
+          },
+          {
+            "from": "buyer",
+            "type": "ssi.update",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "382ce428352859ddabfadb3da44cc7335cb748f4ba89cf9e183578e8c182f9ee"
+          },
+          {
+            "from": "buyer",
+            "type": "kyc.release",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "c9246b8bbfd8ea620a2f097a587cd80ffb0472f8084ebf2ef7d8d477170dde5d"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6f16ac54bf84d7434c0183d1135baaef9a27539a15cef6843a7d31bf18d4c1cb"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "fafcce943bfd420ace3bc4ae75ca74ef4e2cef35087d2a9238c50f42375a8890"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f7d6b19fbc0b8c7730e81c0b761c11b89314cefec4e95ef36da2027f6ad36ab8"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a61aa90d3d38882830dd425a49396f6554fb929dfce815ac0cce29235d085b44"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "buyer",
+            "type": "kyc.release",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "023f0a321b9ba556e2677f83b650295ca047591a260b242c04fb1cc1efb98c69"
+          },
+          {
+            "from": "seller",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e44640f53dd004e8d1a96e9e2276fda20d119efc4b1bbabc360dd9248d6f4c02"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "fafcce943bfd420ace3bc4ae75ca74ef4e2cef35087d2a9238c50f42375a8890"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6f16ac54bf84d7434c0183d1135baaef9a27539a15cef6843a7d31bf18d4c1cb"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "cba9190dd69dc1ea73514a2960866d3ba39b49e9732b66e598f4846980736321"
+          },
+          {
+            "from": "buyer",
+            "type": "ssi.update",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6c40b72b1fa02e0094729776b37ef286a050f3dc489e91fe4e590513ec4d5a15"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f7d6b19fbc0b8c7730e81c0b761c11b89314cefec4e95ef36da2027f6ad36ab8"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a61aa90d3d38882830dd425a49396f6554fb929dfce815ac0cce29235d085b44"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "75dac83f498d9f79ccc04d875bc0acb03f948e5981b845de10b7dc2050e85d46"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f7d6b19fbc0b8c7730e81c0b761c11b89314cefec4e95ef36da2027f6ad36ab8"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "borrower",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "ce8ea0feffa1c98d910c70423f8ca28347dfaab0e8f49b53817b5cc921093f92"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a61aa90d3d38882830dd425a49396f6554fb929dfce815ac0cce29235d085b44"
+          },
+          {
+            "from": "borrower",
+            "type": "consent.borrower",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "9387bcaa8e9977303e7565940bff0dae5eac57c325dd1db4a27e529c5050a156"
+          },
+          {
+            "from": "seller",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a4cb90e6efa4590d589d51c71133ecb6cdec35552e6fc796f1b00120fd388451"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "39b1c68bd92d6ea4db3c19ba602185e8ccbcbce7d356314a242b4b37c71feed0"
+          },
+          {
+            "from": "seller",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "15136a7b4b995745a243d52ba2a4f745c3f5314e5d02fa2f67cb526d4b4a5d2a"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "efa8fe76709fe0b60a8f6c77bb0963a2ca3d6f7b94b6be6857a9d9efef6d763a"
+          },
+          {
+            "from": "seller",
+            "type": "doc.sign",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f18eb1cb5665e0797a00da9e162d3312cd6704f0f0e661997ca198f2ec203a22"
+          },
+          {
+            "from": "buyer",
+            "type": "doc.sign",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "c7ce5d6b0c63b618ba6324c0b7b9e94b7436586f9ed18b3651358735040c807b"
+          },
+          {
+            "from": "seller",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b925b2a519fb393c7248e0589618f39d606da822d3d72e22e8fe93696b4e29be"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "56e9bb84167bc80169452af5f82d7ca307985b107e5c15f4e965d3aaaa891b2c"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6f16ac54bf84d7434c0183d1135baaef9a27539a15cef6843a7d31bf18d4c1cb"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "fafcce943bfd420ace3bc4ae75ca74ef4e2cef35087d2a9238c50f42375a8890"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "f7d6b19fbc0b8c7730e81c0b761c11b89314cefec4e95ef36da2027f6ad36ab8"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a61aa90d3d38882830dd425a49396f6554fb929dfce815ac0cce29235d085b44"
+          },
+          {
+            "from": "buyer",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "buyer",
+            "type": "funding.release",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "8a74d017c2b28a630af6bd3d3d4ba03834b5f0db0fc8913afb69fd289fa2ae78"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e11bf05e089e70d64e8a8623a1719fcda20a1e21e9b378575223d42edcc8a03f"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "fafcce943bfd420ace3bc4ae75ca74ef4e2cef35087d2a9238c50f42375a8890"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "672477accd47f1ff3aea8e5c8352532dcbf0cfcb74f59aa714e603b46d713828"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "e9ef2b6d7cca18e7e320da4fe6be459f1b6d2151f121e35a04e46014b09ced55"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "d151b0f5dc7d21cac66888fd2712cac693f22bc4576ec491bf86dc0fabcac429"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bbe8d09be6fc60025ed381253f7bd20a53b6167ad6b9b737a830f7045708542d"
+          },
+          {
+            "from": "seller",
+            "type": "ask",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6f16ac54bf84d7434c0183d1135baaef9a27539a15cef6843a7d31bf18d4c1cb"
+          },
+          {
+            "from": "seller",
+            "type": "settle.execute",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6754774528b96bbd1033f790b9d09c8f26d0948c5ed47a0a050c8474d01265ad"
+          },
+          {
+            "from": "seller",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "53ef1dfc56bcc28e6b804c076596d6b7e2b6e943c00cbcc1cca1a30ed4977327"
+          },
+          {
+            "from": "seller",
+            "type": "receipt.ack",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "b827d905fce4d5c9edbcb075aabb28966458e906729f8b2e92d08899178b5b1d"
+          },
+          {
+            "from": "buyer",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "7ebf8872413bc3df888424ddd9964db3ab9a4918490783d00511863c1863e5b2"
+          },
+          {
+            "from": "buyer",
+            "type": "receipt.ack",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "efd5616cb37fc6bd6b73a66c4aaf7ebc2d3e85e5bd4d01b5b21bf715373e6e84"
+          },
+          {
+            "from": "borrower",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "ea420b4f2330bc3d3de0c31ea7df4f7332c6de246dd7e321a162540f056abe4e"
+          },
+          {
+            "from": "borrower",
+            "type": "receipt.ack",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "c533eeefa0159e8d5dd524e10e21384036cfaff83dd0bbd47286029179123995"
+          },
+          {
+            "from": "seller",
+            "type": "settle.execute",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "6754774528b96bbd1033f790b9d09c8f26d0948c5ed47a0a050c8474d01265ad"
+          },
+          {
+            "from": "seller",
+            "type": "settle.execute",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "bd3f5ee6068cfef75c718914285dbb39d634fc60721a83fcef87e969e9c05bad"
+          },
+          {
+            "from": "seller",
+            "type": "settle.execute",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "92193e41c95c3c33607b23df906bfad3ac241f8f25cfe0cfa0c1760a3adde1d0"
+          }
+        ],
+        "buyer_account_disclosed": true,
+        "buyer_kyc_disclosed": true,
+        "borrower_received_price": null
+      },
+      "borrower": {
+        "node_id": "borrower",
+        "incoming_messages": [
+          {
+            "from": "agent",
+            "type": "consent.request",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "65983713cc9dab8cdbfcf062e47788b2b765247be0be982d4945a12a9e4c8cdc"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "2f3f85ff718d9d59e8fc11ad7583dbf91f06724a65aeba7fd91bda0baf330ed3"
+          },
+          {
+            "from": "agent",
+            "type": "settle.receipt",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "a3ad74a1bf79442baf6c62a7febbb418248cd7586640981b013d98b20ac63fb2"
+          },
+          {
+            "from": "agent",
+            "type": "answer",
+            "trade_id": "LT-20261107-DISTRIBUTED",
+            "body_hash": "2c8e17e8e78d15d443120a42dab68c0da3086f00e9ad6b7320eaa8d9535b2187"
+          }
+        ],
+        "buyer_account_disclosed": false,
+        "buyer_kyc_disclosed": false,
+        "borrower_received_price": false
+      }
+    },
+    "scope": "automated acceptance fixtures; not bank go-live approval",
+    "deployment": "four independent institution containers plus four PostgreSQL containers",
+    "isolation": {
+      "seller": {
+        "mount_destinations": [
+          "/config",
+          "/data"
+        ],
+        "networks": [
+          "exchange-accept-2e395bd7_peers",
+          "exchange-accept-2e395bd7_seller-private"
+        ],
+        "node_id": "seller",
+        "image_id": "sha256:1b59348975a02020f7a0b4b65befe2c9f4668e86b68fd18d5f0592c3691b632a"
+      },
+      "buyer": {
+        "mount_destinations": [
+          "/config",
+          "/data"
+        ],
+        "networks": [
+          "exchange-accept-2e395bd7_buyer-private",
+          "exchange-accept-2e395bd7_peers"
+        ],
+        "node_id": "buyer",
+        "image_id": "sha256:1b59348975a02020f7a0b4b65befe2c9f4668e86b68fd18d5f0592c3691b632a"
+      },
+      "agent": {
+        "mount_destinations": [
+          "/config",
+          "/data"
+        ],
+        "networks": [
+          "exchange-accept-2e395bd7_agent-private",
+          "exchange-accept-2e395bd7_peers"
+        ],
+        "node_id": "agent",
+        "image_id": "sha256:1b59348975a02020f7a0b4b65befe2c9f4668e86b68fd18d5f0592c3691b632a"
+      },
+      "borrower": {
+        "mount_destinations": [
+          "/config",
+          "/data"
+        ],
+        "networks": [
+          "exchange-accept-2e395bd7_borrower-private",
+          "exchange-accept-2e395bd7_peers"
+        ],
+        "node_id": "borrower",
+        "image_id": "sha256:1b59348975a02020f7a0b4b65befe2c9f4668e86b68fd18d5f0592c3691b632a"
+      }
+    }
+  },
+  "go_live_eligible": false,
+  "unverified_bank_controls": [
+    "real bank HSM sessions and key administration",
+    "bank OIDC issuer, MFA and officer entitlement mapping",
+    "approved legal document template",
+    "bank payment-hub ISO scheme XSDs and genuine booked credits",
+    "bank-specific loan-system adapter reconciliation",
+    "bank deployment hardening, backup/restore and independent security review"
+  ],
+  "public_key": "NmyE9NlMAi6ixajjCDEQOBK7GAxG4O7lyfANhEC6b1Y=",
+  "pdf_sha256": "94156c1cd434b7996d1cb251e1eb8c47c7f731493b2f1ddc3c10a05ff9681c68",
+  "signature": "+oeFe9kDnB7f3kP3pnHEM2KUWUzBKyIbHuCYfr8EFRgkTcFo4trFliGApqLXr5/5OJq1hv4Of/lG/dscyrswDw=="
+}

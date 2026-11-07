@@ -1,0 +1,26 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "pattern": "^[a-zA-Z0-9-]{8,100}$",
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "payment_id": {
+      "title": "Payment Id",
+      "type": "string"
+    },
+    "approval": {
+      "additionalProperties": true,
+      "title": "Approval",
+      "type": "object"
+    }
+  },
+  "required": [
+    "execution_id",
+    "payment_id",
+    "approval"
+  ],
+  "title": "FundingNotice",
+  "type": "object"
+}

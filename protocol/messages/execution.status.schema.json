@@ -1,0 +1,19 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "title": "Execution Id",
+      "type": "string"
+    },
+    "body_hash": {
+      "title": "Body Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "execution_id",
+    "body_hash"
+  ],
+  "title": "ExecutionStatus",
+  "type": "object"
+}
